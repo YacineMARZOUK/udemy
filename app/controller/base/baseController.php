@@ -1,12 +1,14 @@
 <?php
 
 require_once "../impl/UserControllerimpl.php";
+require_once "../impl/Courcontrollerimpl.php";
 require_once "../../entities/User.php";
 require_once "../../entities/Student.php";
 require_once "../../entities/Teacher.php";
 require_once 'C:\xampp\htdocs\udemy\app\enums\Role.php';
 session_start();
 $userController = new UserControllerimpl();
+$Courcontroller = new Courcontrollerimpl();
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     ///////////  UserProcess   //////////
 
@@ -73,6 +75,26 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             }
         } catch (Exception $e) {
             echo "Erreur lors de la vérification : " . $e->getMessage();
+        }
+    }
+//*****************************************************add cour****************************************************************
+    if (isset($_POST["addCour"])) {
+        $titre = $_POST["titre"] ?? "";
+        $description = $_POST["description"] ?? "";
+        $images = $_POST["images"] ?? "";
+        $contenu = $_POST["contenu"] ?? "";
+        if (empty($titre) || empty($description) || empty($images) || empty($contenu)) {
+            echo "Tous les champs sont requis.";
+            exit();
+        }
+        $cour = new Cour($titre, $description, $images,  $contenu);
+
+
+        try {
+            $Courcontroller->addCour($cour);
+            echo "le cour est ajoutee avec succès.";
+        } catch (Exception $e) {
+            echo "Erreur lors de l'enregistrement : " . $e->getMessage();
         }
     }
     

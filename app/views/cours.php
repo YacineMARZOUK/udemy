@@ -4,6 +4,7 @@ require_once('../controller/impl/Courcontrollerimpl.php');
 $contrl=new Courcontrollerimpl();
 $result=$contrl->fetchCours();
 
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -151,11 +152,11 @@ $result=$contrl->fetchCours();
                         </p>
                         <h3 class="text-lg font-semibold text-gray-800 mt-2"></h3>
                         <p class="text-gray-600 text-sm mt-1">
-                        <?=$cour->titre?>
+                        <?=$cour->description?>
                         </p>
                         <div class="flex items-center justify-between mt-3">
-                            <p class="text-blue-600 font-bold">$49</p>
-                            <p class="text-blue-600 flex items-center"><i class="ri-star-fill"></i> 4.8</p>
+                            <p class="text-blue-600 font-bold"><?=$cour->contenu?></p>
+                            <p class="text-blue-600 flex items-center"><i class="ri-star-fill"></i><?=$cour->titre?> </p>
                         </div>
                     </div>
                     <div class="mt-4">

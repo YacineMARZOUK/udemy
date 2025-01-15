@@ -22,6 +22,22 @@ require_once 'C:\xampp\htdocs\udemy\app\model\impl\CourModelimpl.php';
 
 
     }
+    public function addCour(Cour $cour){
+        try {
+           return $this->courModel->addCour( $cour);
+           
+            
+     
+        }
+        catch (Exception $e) {
+            return false ;
+
+    }
+
+
+    }
+    
+
 
 
 

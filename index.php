@@ -172,102 +172,59 @@ $result=$contrl->fetchCours();
 
 
     <!-- Courses Categories Section  -->
-    <section class="py-16 px-4 bg-white">
-        <div class="max-w-6xl mx-auto">
-            
-            <div  class="text-center mb-12">
-                <h2 class="text-4xl font-bold mb-4">
-                    Explore Top Courses
-                    <span
-                        class="bg-gradient-to-r from-blue-600 to-blue-300 bg-clip-text text-transparent">Categories</span>
-                </h2>
-                <p class="text-gray-600 max-w-2xl mx-auto">
-                    Find the perfect course to enhance your skills and advance your career. Choose from our wide range
-                    of professional courses designed by industry experts.
-                </p>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div
-                    class="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-100 hover:border-blue-600 hover:scale-105 transition-transform duration-300">
-                    <div class="flex items-center gap-4">
-                        <div class="p-3 bg-blue-600 text-white rounded-lg">
-                            <i class="ri-palette-line text-2xl"></i>
-                        </div>
-                        <div>
-                            <h3 class="font-semibold text-lg">Art Illustration</h3>
-                            <p class="text-gray-500 text-sm">2 Courses</p>
-                        </div>
-                    </div>
-                </div>
+    <section>
+        <div class=" py-10 md:px-12 px-6">
+            <h2 class="text-4xl font-bold text-gray-800 mb-6 text-center md:mb-11">
+                Our ALL <span
+                    class="text-gradient bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-blue-600">Courses</span>
+            </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                 <?php 
+                     foreach ($result as $cour ) {
 
-                <div
-                    class="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-100 hover:border-blue-600 hover:scale-105 transition-transform duration-300">
-                    <div class="flex items-center gap-4">
-                        <div class="p-3 bg-blue-600 text-white rounded-lg">
-                            <i class="ri-computer-line text-2xl"></i>
-                        </div>
-                        <div>
-                            <h3 class="font-semibold text-lg">Digital Marketing</h3>
-                            <p class="text-gray-500 text-sm">2 Courses</p>
-                        </div>
-                    </div>
-                </div>
 
+                    
+                 ?>
                 <div
-                    class="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-100 hover:border-blue-600 hover:scale-105 transition-transform duration-300">
-                    <div class="flex items-center gap-4">
-                        <div class="p-3 bg-blue-600 text-white rounded-lg">
-                            <i class="ri-pen-nib-line text-2xl"></i>
-                        </div>
-                        <div>
-                            <h3 class="font-semibold text-lg">Graphic Design</h3>
-                            <p class="text-gray-500 text-sm">1 Course</p>
+                    class="bg-white border border-blue-600 rounded-lg shadow-md p-4 hover:scale-105 transition-transform">
+                    <img src="/assets/images/cover4.png" alt="Course Image" class="rounded-t-lg w-full">
+                    <div class="py-3">
+                        <p class="text-sm text-gray-500 flex items-center space-x-2">
+                            <span><i class="ri-calendar-line"></i> 20 Nov, 2023</span>
+                            <span><i class="ri-file-list-line"></i> 3 Curriculum</span>
+                            <span><i class="ri-group-line"></i> 5 Students</span>
+                        </p>
+                        <h3 class="text-lg font-semibold text-gray-800 mt-2"></h3>
+                        <p class="text-gray-600 text-sm mt-1">
+                        <?=$cour->description?>
+                        </p>
+                        <div class="flex items-center justify-between mt-3">
+                            <p class="text-blue-600 font-bold"><?=$cour->contenu?></p>
+                            <p class="text-blue-600 flex items-center"><i class="ri-star-fill"></i><?=$cour->titre?> </p>
                         </div>
                     </div>
+                    <div class="mt-4">
+                       <button class="w-full py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors">
+                         Enroll Now
+                      </button>
+                    </div>
                 </div>
+                <?php
+                     }
+                     ?>
 
-                <div
-                    class="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-100 hover:border-blue-600 hover:scale-105 transition-transform duration-300">
-                    <div class="flex items-center gap-4">
-                        <div class="p-3 bg-blue-600 text-white rounded-lg">
-                            <i class="ri-robot-line text-2xl"></i>
-                        </div>
-                        <div>
-                            <h3 class="font-semibold text-lg">Robotics</h3>
-                            <p class="text-gray-500 text-sm">1 Course</p>
-                        </div>
-                    </div>
-                </div>
+                
+               
 
-                <div
-                    class="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-100 hover:border-blue-600 hover:scale-105 transition-transform duration-300">
-                    <div class="flex items-center gap-4">
-                        <div class="p-3 bg-blue-600 text-white rounded-lg">
-                            <i class="ri-layout-line text-2xl"></i>
-                        </div>
-                        <div>
-                            <h3 class="font-semibold text-lg">Web Designing</h3>
-                            <p class="text-gray-500 text-sm">1 Course</p>
-                        </div>
-                    </div>
-                </div>
+                
+                
 
-                <div
-                    class="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-100 hover:border-blue-600 hover:scale-105 transition-transform duration-300">
-                    <div class="flex items-center gap-4">
-                        <div class="p-3 bg-blue-600 text-white rounded-lg">
-                            <i class="ri-code-line text-2xl"></i>
-                        </div>
-                        <div>
-                            <h3 class="font-semibold text-lg">Web Development</h3>
-                            <p class="text-gray-500 text-sm">1 Course</p>
-                        </div>
-                    </div>
-                </div>
+                
             </div>
         </div>
+
     </section>
+
 
 
     <!-- Courses Grid Section -->
