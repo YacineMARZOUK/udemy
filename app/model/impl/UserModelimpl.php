@@ -1,6 +1,6 @@
 <?php
-require_once 'C:/Users/youco/Desktop/iLearN/app/model/UserModel.php';
-require_once 'C:/Users/youco/Desktop/iLearN/app/config/Database.php';
+require_once 'C:\xampp\htdocs\udemy\app\model\UserModel.php';
+require_once 'C:\xampp\htdocs\udemy\app\config\Database.php';
 
 class UserModelimpl implements UserModel
 {
@@ -24,7 +24,7 @@ class UserModelimpl implements UserModel
                     ':name' => $user->getName(),
                     ':email' => $user->getEmail(),
                     ':password' => $user->getPassword(),
-                    ':role' => $user->getRole()->name 
+                    ':role' => $user->getRole()->getValue() 
                 ]
             );
             

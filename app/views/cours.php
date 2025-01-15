@@ -1,8 +1,9 @@
 <?php
+session_start();
 require_once('../controller/impl/Courcontrollerimpl.php');
 $contrl=new Courcontrollerimpl();
 $result=$contrl->fetchCours();
-var_dump($result);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -63,7 +64,6 @@ var_dump($result);
                     </nav>
 
                     <?php
-                    session_start();
                     if (!isset($_SESSION["user"])) {
                         ?>
                         <div class="flex items-center space-x-4">
@@ -151,7 +151,7 @@ var_dump($result);
                         </p>
                         <h3 class="text-lg font-semibold text-gray-800 mt-2"></h3>
                         <p class="text-gray-600 text-sm mt-1">
-                        <?=$cour->nom?>
+                        <?=$cour->titre?>
                         </p>
                         <div class="flex items-center justify-between mt-3">
                             <p class="text-blue-600 font-bold">$49</p>

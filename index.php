@@ -1,3 +1,10 @@
+<?php
+
+require_once('app/controller/impl/Courcontrollerimpl.php');
+$contrl=new Courcontrollerimpl();
+$result=$contrl->fetchCours();
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -46,7 +53,7 @@
             <div class="container mx-auto px-4">
                 <div class="flex items-center justify-between py-4">
                     <a href="./index.php">
-                        <img src="./assets/images/Youdemy_Logo.svg" alt="Youdemy Platform">
+                        <img src="assets/images/Youdemy_Logo.svg" alt="Youdemy Platform">
                     </a>
                     <nav class="hidden md:flex items-center space-x-6">
                         <a href="/index.php"
@@ -69,12 +76,12 @@
                         <div class="flex items-center space-x-4">
                             <button
                                 class="p-2 px-4 bg-blue-600 text-white rounded-full hover:bg-white hover:text-blue-600 hover:border hover:border-blue-600 transition-colors">
-                                <a href="../app/user/login.php">Login</a>
+                                <a href="app/user/login.php">Login</a>
                             </button>
 
                             <button
                                 class="p-2 px-4 border border-blue-600 text-blue-600 rounded-full hover:bg-blue-600 hover:text-white transition-colors">
-                                <a href="../app/user/register.php">Register</a>
+                                <a href="app/user/register.php">Register</a>
                             </button>
 
 
@@ -268,130 +275,51 @@
     <section>
         <div class=" py-10 md:px-12 px-6">
             <h2 class="text-4xl font-bold text-gray-800 mb-6 text-center md:mb-11">
-                Our Popular <span
+                Our ALL <span
                     class="text-gradient bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-blue-600">Courses</span>
             </h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                 <?php 
+                     foreach ($result as $cour ) {
 
+
+                    
+                 ?>
                 <div
                     class="bg-white border border-blue-600 rounded-lg shadow-md p-4 hover:scale-105 transition-transform">
-                    <img src="../assets/images/cover4.png" alt="Course Image" class="rounded-t-lg w-full">
+                    <img src="/assets/images/cover4.png" alt="Course Image" class="rounded-t-lg w-full">
                     <div class="py-3">
                         <p class="text-sm text-gray-500 flex items-center space-x-2">
                             <span><i class="ri-calendar-line"></i> 20 Nov, 2023</span>
                             <span><i class="ri-file-list-line"></i> 3 Curriculum</span>
                             <span><i class="ri-group-line"></i> 5 Students</span>
                         </p>
-                        <h3 class="text-lg font-semibold text-gray-800 mt-2">Master Web Development</h3>
+                        <h3 class="text-lg font-semibold text-gray-800 mt-2"></h3>
                         <p class="text-gray-600 text-sm mt-1">
-                            Learn the basics of web development, including HTML, CSS, and JavaScript.
+                        <?=$cour->titre?>
                         </p>
                         <div class="flex items-center justify-between mt-3">
                             <p class="text-blue-600 font-bold">$49</p>
                             <p class="text-blue-600 flex items-center"><i class="ri-star-fill"></i> 4.8</p>
                         </div>
                     </div>
-                </div>
-
-                <div
-                    class="bg-white border border-blue-600 rounded-lg shadow-md p-4 hover:scale-105 transition-transform">
-                    <img src="../assets/images/cover5.png" alt="Course Image" class="rounded-t-lg w-full">
-                    <div class="py-3">
-                        <p class="text-sm text-gray-500 flex items-center space-x-2">
-                            <span><i class="ri-calendar-line"></i> 18 Nov, 2023</span>
-                            <span><i class="ri-file-list-line"></i> 4 Curriculum</span>
-                            <span><i class="ri-group-line"></i> 8 Students</span>
-                        </p>
-                        <h3 class="text-lg font-semibold text-gray-800 mt-2">Business English Essentials</h3>
-                        <p class="text-gray-600 text-sm mt-1">
-                            Improve your business communication skills in English.
-                        </p>
-                        <div class="flex items-center justify-between mt-3">
-                            <p class="text-blue-600 font-bold">$39</p>
-                            <p class="text-blue-600 flex items-center"><i class="ri-star-fill"></i> 4.7</p>
-                        </div>
+                    <div class="mt-4">
+                       <button class="w-full py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors">
+                         Enroll Now
+                      </button>
                     </div>
                 </div>
+                <?php
+                     }
+                     ?>
 
-                <div
-                    class="bg-white border border-blue-600 rounded-lg shadow-md p-4 hover:scale-105 transition-transform">
-                    <img src="../assets/images/cover6.png" alt="Course Image" class="rounded-t-lg w-full">
-                    <div class="py-3">
-                        <p class="text-sm text-gray-500 flex items-center space-x-2">
-                            <span><i class="ri-calendar-line"></i> 15 Nov, 2023</span>
-                            <span><i class="ri-file-list-line"></i> 5 Curriculum</span>
-                            <span><i class="ri-group-line"></i> 12 Students</span>
-                        </p>
-                        <h3 class="text-lg font-semibold text-gray-800 mt-2">Python Programming Basics</h3>
-                        <p class="text-gray-600 text-sm mt-1">
-                            A beginner-friendly course to learn Python programming.
-                        </p>
-                        <div class="flex items-center justify-between mt-3">
-                            <p class="text-blue-600 font-bold">Free</p>
-                            <p class="text-blue-600 flex items-center"><i class="ri-star-fill"></i> 4.9</p>
-                        </div>
-                    </div>
-                </div>
+                
+               
 
-                <div
-                    class="bg-white border border-blue-600 rounded-lg shadow-md p-4 hover:scale-105 transition-transform">
-                    <img src="../assets/images/cover7.jpg" alt="Course Image" class="rounded-t-lg w-full">
-                    <div class="py-3">
-                        <p class="text-sm text-gray-500 flex items-center space-x-2">
-                            <span><i class="ri-calendar-line"></i> 12 Nov, 2023</span>
-                            <span><i class="ri-file-list-line"></i> 6 Curriculum</span>
-                            <span><i class="ri-group-line"></i> 15 Students</span>
-                        </p>
-                        <h3 class="text-lg font-semibold text-gray-800 mt-2">Graphic Design Basics</h3>
-                        <p class="text-gray-600 text-sm mt-1">
-                            Learn to design beautiful graphics using Photoshop and Canva.
-                        </p>
-                        <div class="flex items-center justify-between mt-3">
-                            <p class="text-blue-600 font-bold">$29</p>
-                            <p class="text-blue-600 flex items-center"><i class="ri-star-fill"></i> 4.6</p>
-                        </div>
-                    </div>
-                </div>
+                
+                
 
-                <div
-                    class="bg-white border border-blue-600 rounded-lg shadow-md p-4 hover:scale-105 transition-transform">
-                    <img src="../assets/images/cover1.jpg" alt="Course Image" class="rounded-t-lg w-full">
-                    <div class="py-3">
-                        <p class="text-sm text-gray-500 flex items-center space-x-2">
-                            <span><i class="ri-calendar-line"></i> 10 Nov, 2023</span>
-                            <span><i class="ri-file-list-line"></i> 4 Curriculum</span>
-                            <span><i class="ri-group-line"></i> 10 Students</span>
-                        </p>
-                        <h3 class="text-lg font-semibold text-gray-800 mt-2">Digital Marketing Strategies</h3>
-                        <p class="text-gray-600 text-sm mt-1">
-                            Master digital marketing to grow your business online.
-                        </p>
-                        <div class="flex items-center justify-between mt-3">
-                            <p class="text-blue-600 font-bold">$35</p>
-                            <p class="text-blue-600 flex items-center"><i class="ri-star-fill"></i> 4.5</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div
-                    class="bg-white border border-blue-600 rounded-lg shadow-md p-4 hover:scale-105 transition-transform">
-                    <img src="../assets/images/cover3.jpg" alt="Course Image" class="rounded-t-lg w-full">
-                    <div class="py-3">
-                        <p class="text-sm text-gray-500 flex items-center space-x-2">
-                            <span><i class="ri-calendar-line"></i> 8 Nov, 2023</span>
-                            <span><i class="ri-file-list-line"></i> 3 Curriculum</span>
-                            <span><i class="ri-group-line"></i> 7 Students</span>
-                        </p>
-                        <h3 class="text-lg font-semibold text-gray-800 mt-2">English Classes</h3>
-                        <p class="text-gray-600 text-sm mt-1">
-                            Discover the principles of user interface and experience design.
-                        </p>
-                        <div class="flex items-center justify-between mt-3">
-                            <p class="text-blue-600 font-bold">$25</p>
-                            <p class="text-blue-600 flex items-center"><i class="ri-star-fill"></i> 4.4</p>
-                        </div>
-                    </div>
-                </div>
+                
             </div>
         </div>
 

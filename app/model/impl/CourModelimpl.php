@@ -1,7 +1,7 @@
 <?php
 
-require_once 'C:\Users\youco\Desktop\iLearN\app\model\CourModel.php';
-require_once 'C:\Users\youco\Desktop\iLearN\app\config\Database.php';
+require_once 'C:\xampp\htdocs\udemy\app\model\CourModel.php';
+require_once 'C:\xampp\htdocs\udemy\app\config\Database.php';
 
 class CourModelimpl implements CourModel
 {

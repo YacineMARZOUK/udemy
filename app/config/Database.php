@@ -1,10 +1,9 @@
 <?php
-
 require_once 'env.php';
 
 class Database {
 
-    private static ?Database $instance = null; 
+    private static ?Database $instance = null;
     private PDO $pdo;
 
     private function __construct() {
@@ -29,4 +28,5 @@ class Database {
         return $this->pdo;
     }
 }
+
 ?>
