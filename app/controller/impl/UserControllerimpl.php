@@ -1,10 +1,10 @@
 <?php
-require_once '../../entities/User.php';
-require_once '../../entities/Student.php';
-require_once '../../entities/Teacher.php';
-require_once '../../enums/Role.php';
-require_once '../../model/UserModel.php';
-require_once '../../model/impl/UserModelimpl.php';
+require_once 'C:\xampp\htdocs\udemy\app\entities\User.php';
+require_once 'C:\xampp\htdocs\udemy\app\entities\Student.php';
+require_once 'C:\xampp\htdocs\udemy\app\entities\Teacher.php';
+require_once 'C:\xampp\htdocs\udemy\app\enums\Role.php';
+require_once 'C:\xampp\htdocs\udemy\app\model\UserModel.php';
+require_once 'C:\xampp\htdocs\udemy\app\model\impl\UserModelimpl.php';
 
 class UserControllerimpl {
     private UserModelimpl $userModel;

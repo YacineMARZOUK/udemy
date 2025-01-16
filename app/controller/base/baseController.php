@@ -1,10 +1,9 @@
 <?php
-
-require_once "../impl/UserControllerimpl.php";
-require_once "../impl/Courcontrollerimpl.php";
-require_once "../../entities/User.php";
-require_once "../../entities/Student.php";
-require_once "../../entities/Teacher.php";
+require_once 'C:xampp\htdocs\udemy\app\controller\impl\UserControllerimpl.php';
+require_once 'C:\xampp\htdocs\udemy\app\controller\impl\Courcontrollerimpl.php';
+require_once 'C:\xampp\htdocs\udemy\app\entities\User.php';
+require_once 'C:\xampp\htdocs\udemy\app\entities\Student.php';
+require_once 'C:\xampp\htdocs\udemy\app\entities\Teacher.php';
 require_once 'C:\xampp\htdocs\udemy\app\enums\Role.php';
 session_start();
 $userController = new UserControllerimpl();
@@ -97,6 +96,25 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             echo "Erreur lors de l'enregistrement : " . $e->getMessage();
         }
     }
+//*****************************************************search cours****************************************************************
+
+if (isset($_POST["search"])) {
+    $searchTerm = $_POST["search"] ?? "";
+    
+    if (!empty($searchTerm)) {
+        $searchResults = $Courcontroller->searchCour($searchTerm);
+        
+        $_SESSION['searchResults'] = $searchResults;
+        
+        header("Location: ../../views/coursStudent.php");
+        
+        exit();
+    } else {
+       
+        header("Location: ../../views/coursStudent.php");
+        exit();
+    }
+}
     
 
     if (isset($_POST["deleteStudent"])) {
@@ -120,6 +138,7 @@ if ($_SERVER["REQUEST_METHOD"] = "GET") {
 
         header("location: view/addcours");
     }
+    
 }
 
 ?>

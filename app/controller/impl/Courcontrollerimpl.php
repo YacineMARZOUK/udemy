@@ -33,19 +33,26 @@ require_once 'C:\xampp\htdocs\udemy\app\model\impl\CourModelimpl.php';
             return false ;
 
     }
+    
+ }
+ public function searchCour($searchTerm){
+        try {
+           return $this->courModel->searchCour( $searchTerm);
+           
+            
+     
+        }
+        catch (Exception $e) {
+            return false ;
+
+    }
+
 
 
     }
-    
-
-
-
 
 
  }
-
-
-
 
 
 ?>

@@ -1,13 +1,10 @@
 <?php
-session_start();
-require_once('../controller/impl/Courcontrollerimpl.php');
-require_once('../controller/impl/UserControllerimpl.php');
-$statis = new UserModelimpl();
-$statisResult =$statis->countUser();
-var_dump($statisResult);
 
+require_once('../controller/impl/Courcontrollerimpl.php');
+require_once('C:\xampp\htdocs\udemy\app\controller\base\baseController.php'); 
 $contrl=new Courcontrollerimpl();
 $result=$contrl->fetchCours();
+
 
 
 ?>
@@ -132,30 +129,32 @@ $result=$contrl->fetchCours();
         <!-- Hero Section -->
     </div>
 
-    <section class="bg-gray-50 py-10">
-            <div class="container mx-auto px-6">
-                <h2 class="text-3xl font-semibold text-gray-800 mb-6 text-center">Course Statistics</h2>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <!-- Number of Courses -->
-                    <div class="bg-white border border-blue-600 rounded-lg p-6 text-center">
-                        <h3 class="text-xl font-semibold text-gray-800">Total Courses</h3>
-                        <p class="text-2xl font-bold text-blue-600"><?= $statistics['total_courses'] ?? 0 ?></p>
-                    </div>
 
-                    <!-- Number of Students -->
-                    <div class="bg-white border border-blue-600 rounded-lg p-6 text-center">
-                        <h3 class="text-xl font-semibold text-gray-800">Total Students</h3>
-                        <p class="text-2xl font-bold text-blue-600"><?= $statisResult ?></p>
-                    </div>
 
-                    <!-- Popular Course -->
-                    <div class="bg-white border border-blue-600 rounded-lg p-6 text-center">
-                        <h3 class="text-xl font-semibold text-gray-800">Most Popular Course</h3>
-                        <p class="text-2xl font-bold text-blue-600"><?= $statistics['popular_course'] ?? 'N/A' ?></p>
-                    </div>
-                </div>
-            </div>
-        </section>
+    <section class="py-10 md:px-12 px-6 bg-gray-100">
+       <div class="container mx-auto">
+        <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">
+            Search for Your <span class="text-gradient bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-blue-600">Courses</span>
+        </h2>
+        <form method="POST" action="../controller/base/baseController.php" class="flex justify-center">
+            <input 
+                type="text" 
+                name="search" 
+                onchange="this.form.submit()"
+                placeholder="Enter course name or keyword" 
+                class="w-full max-w-lg px-4 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-600" 
+            />
+            <button 
+                type="submit" 
+                name="searchCours"
+                class="px-6 py-2 bg-blue-600 text-white font-semibold rounded-r-lg hover:bg-blue-700 transition-colors"
+            >
+                Search
+            </button>
+         </form>
+        </div>
+    </section>
+
     <!-- Courses Grid Section -->
 
     <section>

@@ -36,30 +36,24 @@ class CourModelimpl implements CourModel
     }
 
     public function updateCour(Cour $cour): void
-    {
+{
+    $query = "UPDATE Cours SET titre = :courtitre, description = :courdescription, contenu = :courContent , image = :image ";
 
-
-
-        $query = "UPDATE Cours SET titre = :courtitre, description = :courdescription, contenu = :courContent , image = :image ";
-
-
-        try {
-            $stmt = $this->conn->prepare($query);
-
-            $stmt->execute(
-                [
-                    ':courtitre' => $cour->gettitre(),
-                    ':courdescription' => $cour->getdescription(),
-                    ':courContent' => $cour->getcontenu(),
-                    ':image' => $cour->getimages() ?? "hhhhhhhhh.jpg"
-
-                ]
-            );
-
-        } catch (Exception $e) {
-            throw new Exception("error while saving user into database");
-        }
+    try {
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute(
+            [
+                ':courtitre' => $cour->gettitre(),
+                ':courdescription' => $cour->getdescription(),
+                ':courContent' => $cour->getcontenu(),
+                ':image' => $cour->getimages() ?? "hhhhhhhhh.jpg"
+            ]
+        ); // Assurez-vous que cette ligne est fermée correctement
+    } catch (Exception $e) {
+        throw new Exception("error while saving user into database");
     }
+}
+
 
     public function deleteCour(int $id): void
     {
@@ -69,36 +63,27 @@ class CourModelimpl implements CourModel
         $statement->execute();
     }
 
-    public function searchCour(string $titre): array
+    public function searchCour(string $searchTerm): array
     {
-        $query = "
-            SELECT DISTINCT Cours.*, user.*, categorie.* 
-            FROM wiki 
-            JOIN user ON wiki.idUser = user.userId 
-            JOIN categorie ON wiki.idCategorie = categorie.categorieId 
-            WHERE wiki.wikiTitre LIKE CONCAT('%', ?, '%') 
-            OR categorie.categorieName LIKE CONCAT('%', ?, '%')
-        ";
-
+        $query = "SELECT * FROM cours 
+                  WHERE titre LIKE :searchTerm 
+                  OR description LIKE :searchTerm 
+                  OR contenu LIKE :searchTerm";
+    
         try {
             $stmt = $this->conn->prepare($query);
-            $stmt->execute([$titre, $titre]);
-            $results = $stmt->fetchAll();
-
-            $users = [];
-
-            foreach ($results as $userResult) {
-                $user = new User($userResult["email"], $userResult["password"], $userResult["name"]);
-
-                $users[] = $user;
-                // array_push($users, $user);
-            }
-            return $users;
-
+            $search = "%{$searchTerm}%";
+            $stmt->bindValue(':searchTerm', $search, PDO::PARAM_STR);
+            $stmt->execute();
+            
+            return $stmt->fetchAll(PDO::FETCH_OBJ);
         } catch (Exception $e) {
-            throw new Exception("Error fetching users: " . $e->getMessage());
+            // Log the error or return an empty array to avoid breaking the code
+            error_log("Error searching courses: " . $e->getMessage());
+            return []; // Return an empty array instead of false
         }
     }
+
 
     public function countCour(): int
     {
