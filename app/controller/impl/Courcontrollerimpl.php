@@ -54,17 +54,28 @@ require_once 'C:\xampp\htdocs\udemy\app\model\impl\CourModelimpl.php';
         try {
            return $this->courModel->deleteCour( $id);
            
-            
-     
         }
         catch (Exception $e) {
             return false ;
-
     }
-
-
-
     }
+public function updateCour($id): bool
+{
+    try {
+        return $this->courModel->updateCour($id);
+    } catch (Exception $e) {
+        return false;
+    }
+}
+
+public function getCourseById(int $id): ?object
+{
+    try {
+        return $this->courModel->getCourseById($id);
+    } catch (Exception $e) {
+        return null;
+    }
+}
 
 
 

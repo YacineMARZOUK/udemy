@@ -35,24 +35,44 @@ class CourModelimpl implements CourModel
         }
     }
 
-    public function updateCour(Cour $cour): void
-{
-    $query = "UPDATE Cours SET titre = :courtitre, description = :courdescription, contenu = :courContent , image = :image ";
-
-    try {
-        $stmt = $this->conn->prepare($query);
-        $stmt->execute(
-            [
-                ':courtitre' => $cour->gettitre(),
-                ':courdescription' => $cour->getdescription(),
-                ':courContent' => $cour->getcontenu(),
-                ':image' => $cour->getimages() ?? "hhhhhhhhh.jpg"
-            ]
-        ); // Assurez-vous que cette ligne est fermée correctement
-    } catch (Exception $e) {
-        throw new Exception("error while saving user into database");
+    public function updateCour($course) {
+        try {
+            $sql = "UPDATE cours SET titre = ?, description = ? WHERE id = ?";
+            $stmt = $this->conn->prepare($sql);
+            return $stmt->execute([
+                $course->getTitre(),
+                $course->getDescription(),
+                $course->getId()
+            ]);
+        } catch (PDOException $e) {
+            throw new Exception("Error updating course: " . $e->getMessage());
+        }
     }
-}
+    
+    public function getCourseById($id) {
+        try {
+            $sql = "SELECT * FROM cours WHERE id = ?";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute([$id]);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            echo "is created";
+            
+            if (!$result) {
+                return null;
+            }
+            
+            $course = new Cour(
+                $result['titre'],
+                $result['description'] ?? '',
+                $result['images'] ?? '',
+                $result['contenu'] ?? ''
+            );
+            $course->setId($result['id']);
+            return $course;
+        } catch (PDOException $e) {
+            throw new Exception("Error fetching course: " . $e->getMessage());
+        }
+    }
 
 
     public function deleteCour(int $id): void

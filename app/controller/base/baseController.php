@@ -126,13 +126,43 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         header("Location: ../../views/cours.php");
     }
 
-    // Vous pouvez ajouter d'autres conditions pour les actions concernant les étudiants
+      //*****************************************************update cours****************************************************************
+      if (isset($_POST['updateCourseSubmit'])) {
+        $courseId = isset($_POST['courseId']) ? (int)$_POST['courseId'] : 0;
+        $titre = $_POST['titre'] ?? '';
+        $description = $_POST['description'] ?? ''; // Add other fields as needed
+        
+        if ($courseId <= 0 || empty($titre)) {
+            header("Location: ../../views/cours.php?error=invalid_input");
+            exit();
+        }
+        
+        try {
+            $updatedCourse = new Cour($titre, $description, '', ''); // Adjust constructor parameters as needed
+            $updatedCourse->setId($courseId);
+            
+            $result = $Courcontroller->updateCour($updatedCourse);
+            if ($result) {
+                header("Location: ../../views/cours.php?success=updated");
+            } else {
+                header("Location: ../../views/cours.php?error=update_failed");
+            }
+            exit();
+        } catch (Exception $e) {
+            error_log("Error updating course: " . $e->getMessage());
+            header("Location: ../../views/cours.php?error=system_error");
+            exit();
+        }
+    }
+
+
+
     if (isset($_POST["deleteStudent"])) {
-        // Code pour supprimer un étudiant, si nécessaire
+      
     }
 }
 
-// Vérification GET request (réparez l'assignation incorrecte de la condition)
+
 if ($_SERVER["REQUEST_METHOD"] === "GET") {
     if (isset($_GET["getUsers"])) {
         // Supposé $categcontroller et sa méthode getCatgeories()
