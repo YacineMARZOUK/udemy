@@ -50,6 +50,22 @@ require_once 'C:\xampp\htdocs\udemy\app\model\impl\CourModelimpl.php';
 
 
     }
+ public function deleteCour($id){
+        try {
+           return $this->courModel->deleteCour( $id);
+           
+            
+     
+        }
+        catch (Exception $e) {
+            return false ;
+
+    }
+
+
+
+    }
+
 
 
  }
