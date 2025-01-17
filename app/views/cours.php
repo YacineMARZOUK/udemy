@@ -66,7 +66,7 @@ $result=$contrl->fetchCours();
                         <a href="./pages/pricing.php" class="text-gray-900 hover:text-bg-blue-600 transition-colors">Pricing</a>
                         <a href="./pages/features.php" class="text-gray-900 hover:text-bg-blue-600 transition-colors">Features</a>
                         <a href="./pages/features.php" class="text-gray-900 hover:text-bg-blue-600 transition-colors">Blog</a>
-                        <a href="./pages/contact.php" class="text-gray-900 hover:text-bg-blue-600 transition-colors">Help Center</a>
+                        <a href="addcours.php" class="p-2 px-4 bg-blue-600 text-white rounded-full hover:bg-white hover:text-blue-600 hover:border hover:border-blue-600 transition-colors">ADD cours</a>
                     </nav>
 
                     <?php
@@ -101,7 +101,7 @@ $result=$contrl->fetchCours();
 
                             <button
                                 class="p-2 px-4 border border-blue-600 text-blue-600 rounded-full hover:bg-blue-600 hover:text-white transition-colors">
-                                <a href="../app/user/register.php"><?php echo $_SESSION['user']['nom'] ?></a>
+                                <a href="../app/user/register.php"></a>
                             </button>
 
 
@@ -123,7 +123,7 @@ $result=$contrl->fetchCours();
                         <a href="./pages/pricing.php" class="text-gray-900 hover:text-bg-blue-600 transition-colors">Pricing</a>
                         <a href="./pages/features.php" class="text-gray-900 hover:text-bg-blue-600 transition-colors">Features</a>
                         <a href="./pages/features.php" class="text-gray-900 hover:text-bg-blue-600 transition-colors">Blog</a>
-                        <a href="./pages/contact.php" class="text-gray-900 hover:text-bg-blue-600 transition-colors">Help Center</a>
+                        <a href="addcours.php" class="text-gray-900 hover:text-bg-blue-600 transition-colors">ADD cours</a>
                     </nav>
                 </div>
             </div>

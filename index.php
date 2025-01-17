@@ -1,6 +1,7 @@
 <?php
 require_once('app/controller/impl/Courcontrollerimpl.php');
 require_once('app/controller/impl/UserControllerimpl.php');
+require_once('C:\xampp\htdocs\udemy\app\controller\base\baseController.php'); 
 
 $contrl=new Courcontrollerimpl();
 $result=$contrl->fetchCours();
@@ -69,10 +70,7 @@ $result=$contrl->fetchCours();
                         <a href="./pages/contact.php"
                             class="text-gray-900 hover:text-bg-blue-600 transition-colors">Help Center</a>
                     </nav>
-                    <?php
-                    
-                    if (!isset($_SESSION["user"])) {
-                        ?>
+                   
                         <div class="flex items-center space-x-4">
                             <button
                                 class="p-2 px-4 bg-blue-600 text-white rounded-full hover:bg-white hover:text-blue-600 hover:border hover:border-blue-600 transition-colors">
@@ -89,10 +87,7 @@ $result=$contrl->fetchCours();
                                 <i class="ri-menu-4-fill text-2xl"></i>
                             </button>
                         </div>
-                        <?php
-                    } else {
-
-                        ?>
+                       
 
                         <div class="flex items-center space-x-4">
                             <button
@@ -102,7 +97,7 @@ $result=$contrl->fetchCours();
 
                             <button
                                 class="p-2 px-4 border border-blue-600 text-blue-600 rounded-full hover:bg-blue-600 hover:text-white transition-colors">
-                                <a href="../app/user/register.php"><?php echo $userData->getEmail() ?></a>
+                                <a href="../app/user/register.php"></a>
                             </button>
 
 
@@ -111,9 +106,7 @@ $result=$contrl->fetchCours();
                             </button>
                         </div>
                     </div>
-                    <?php
-                    }
-                    ?>
+                   
                 <!-- Mobile Menu-->
                 <div id="mobile-menu" class="hidden md:hidden py-4">
                     <nav class="flex flex-col space-y-4">
@@ -229,58 +222,7 @@ $result=$contrl->fetchCours();
 
     <!-- Courses Grid Section -->
 
-    <section>
-        <div class=" py-10 md:px-12 px-6">
-            <h2 class="text-4xl font-bold text-gray-800 mb-6 text-center md:mb-11">
-                Our ALL <span
-                    class="text-gradient bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-blue-600">Courses</span>
-            </h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                 <?php 
-                     foreach ($result as $cour ) {
-
-
-                    
-                 ?>
-                <div
-                    class="bg-white border border-blue-600 rounded-lg shadow-md p-4 hover:scale-105 transition-transform">
-                    <img src="/assets/images/cover4.png" alt="Course Image" class="rounded-t-lg w-full">
-                    <div class="py-3">
-                        <p class="text-sm text-gray-500 flex items-center space-x-2">
-                            <span><i class="ri-calendar-line"></i> 20 Nov, 2023</span>
-                            <span><i class="ri-file-list-line"></i> 3 Curriculum</span>
-                            <span><i class="ri-group-line"></i> 5 Students</span>
-                        </p>
-                        <h3 class="text-lg font-semibold text-gray-800 mt-2"></h3>
-                        <p class="text-gray-600 text-sm mt-1">
-                        <?=$cour->titre?>
-                        </p>
-                        <div class="flex items-center justify-between mt-3">
-                            <p class="text-blue-600 font-bold">$49</p>
-                            <p class="text-blue-600 flex items-center"><i class="ri-star-fill"></i> 4.8</p>
-                        </div>
-                    </div>
-                    <div class="mt-4">
-                       <button class="w-full py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors">
-                         Enroll Now
-                      </button>
-                    </div>
-                </div>
-                <?php
-                     }
-                     ?>
-
-                
-               
-
-                
-                
-
-                
-            </div>
-        </div>
-
-    </section>
+   
 
     <!-- FAQs Section -->
     <section>

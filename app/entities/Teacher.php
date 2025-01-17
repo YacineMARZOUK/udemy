@@ -7,7 +7,7 @@ require_once __DIR__ . '/User.php';
 
 
        public function __construct(string $email, string $password, string $name , Role $role ) {
-          parent::__construct( $email,  $password,  $nom  , $role );
+          parent::__construct( $email,  $password,  $name  , $role );
              
 
        }

@@ -1,6 +1,7 @@
 <?php
 require_once 'C:xampp\htdocs\udemy\app\controller\impl\UserControllerimpl.php';
 require_once 'C:\xampp\htdocs\udemy\app\controller\impl\Courcontrollerimpl.php';
+require_once 'C:\xampp\htdocs\udemy\app\controller\impl\CategorieControllerimpl.php';
 require_once 'C:\xampp\htdocs\udemy\app\entities\User.php';
 require_once 'C:\xampp\htdocs\udemy\app\entities\Student.php';
 require_once 'C:\xampp\htdocs\udemy\app\entities\Teacher.php';
@@ -10,6 +11,7 @@ session_start();
 
 $userController = new UserControllerimpl();
 $Courcontroller = new Courcontrollerimpl();
+$Categoriecontroller = new CategorieControllerimpl();
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     ///////////  UserProcess   //////////
@@ -43,7 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         try {
             $userController->save($person);
-            echo "Utilisateur enregistré avec succès.";
+            header("Location: ../../user/login.php");
         } catch (Exception $e) {
             echo "Erreur lors de l'enregistrement : " . $e->getMessage();
         }
@@ -67,6 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             if ($userData) {
                 $_SESSION["user"] = $userData;
+                
                 require_once("../../../index.php");
                 exit();
             } else {
@@ -160,7 +163,31 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 }
 
+//*******************************************************************admin section********************************************** */
 
+
+//*******************************************************************add categorie********************************************** */
+
+if (isset($_POST["addCategory"])) {
+    $titre = $_POST["titre"] ?? "";
+    
+
+    if (empty($titre)) {
+        echo "le champs DE titre est requis.";
+        exit();
+    }
+
+    $Categorie = new categories($titre);
+
+    try {
+        
+        $Categoriecontroller->addCategorie($Categorie);
+        echo "Le cours a été ajouté avec succès.";
+    } catch (Exception $e) {
+        echo "Erreur lors de l'enregistrement : " . $e->getMessage();
+    }
+}
+//************************************************************************   GET     ********************************************************* */
 if ($_SERVER["REQUEST_METHOD"] === "GET") {
     if (isset($_GET["getUsers"])) {
         // Supposé $categcontroller et sa méthode getCatgeories()
