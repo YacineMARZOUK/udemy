@@ -7,9 +7,9 @@ class User {
     private string $name;
     private string $email;
     private string $password;
-    private string $role;
+    private $role;
 
-    public function __construct( string $email, string $password, string $name  , string $role ) {
+    public function __construct( string $email, string $password, string $name  ,  $role ) {
         $this->name = $name;
         $this->email = $email;
         $this->password = $password;

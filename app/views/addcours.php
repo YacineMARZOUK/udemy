@@ -69,7 +69,7 @@ $result = $contrl->fetchCours();
                         <div class="flex items-center space-x-4">
                             <button
                                 class="p-2 px-4 bg-blue-600 text-white rounded-full hover:bg-white hover:text-blue-600 hover:border hover:border-blue-600 transition-colors">
-                                <a href="../app/user/login.php">Login</a>
+                                <a href="../user/login.php">Login</a>
                             </button>
 
                             <button
@@ -87,7 +87,7 @@ $result = $contrl->fetchCours();
                         <div class="flex items-center space-x-4">
                             <button
                                 class="p-2 px-4 bg-blue-600 text-white rounded-full hover:bg-white hover:text-blue-600 hover:border hover:border-blue-600 transition-colors">
-                                <a href="../app/user/login.php">Log Out</a>
+                                <a href="../user/login.php">Log Out</a>
                             </button>
 
                             <button

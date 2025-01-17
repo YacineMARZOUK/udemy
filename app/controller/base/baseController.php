@@ -67,9 +67,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             if ($userData) {
                 $_SESSION["user"] = $userData;
-                var_dump($_SESSION["user"]);
-                echo "Connexion réussie.";
-                header("Location: ../../../index.php");
+                require_once("../../../index.php");
                 exit();
             } else {
                 // Email ou mot de passe incorrect

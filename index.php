@@ -1,9 +1,9 @@
 <?php
-
 require_once('app/controller/impl/Courcontrollerimpl.php');
+require_once('app/controller/impl/UserControllerimpl.php');
+
 $contrl=new Courcontrollerimpl();
 $result=$contrl->fetchCours();
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -70,7 +70,7 @@ $result=$contrl->fetchCours();
                             class="text-gray-900 hover:text-bg-blue-600 transition-colors">Help Center</a>
                     </nav>
                     <?php
-                    session_start();
+                    
                     if (!isset($_SESSION["user"])) {
                         ?>
                         <div class="flex items-center space-x-4">
@@ -102,7 +102,7 @@ $result=$contrl->fetchCours();
 
                             <button
                                 class="p-2 px-4 border border-blue-600 text-blue-600 rounded-full hover:bg-blue-600 hover:text-white transition-colors">
-                                <a href="../app/user/register.php"><?php echo $_SESSION['user']['nom'] ?></a>
+                                <a href="../app/user/register.php"><?php echo $userData->getEmail() ?></a>
                             </button>
 
 

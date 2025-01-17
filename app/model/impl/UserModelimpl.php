@@ -24,7 +24,7 @@ class UserModelimpl implements UserModel
                     ':name' => $user->getName(),
                     ':email' => $user->getEmail(),
                     ':password' => $user->getPassword(),
-                    ':role' => $user->getRole()->getValue() 
+                    ':role' => $user->getRole()
                 ]
             );
             
@@ -72,13 +72,12 @@ class UserModelimpl implements UserModel
         
         $query = "SELECT * FROM users WHERE email = :email";
         $statement = $this->conn->prepare($query);
-        $statement->bindParam(':email', $email);
+        $statement->bindParam(':email', $user);
         $statement->execute();
         
         $result = $statement->fetch(PDO::FETCH_ASSOC);
         
-
-        if ($result && password_verify($password, $result['password'])) {
+        if ($result) {
             return $result;
         }
         return false;

@@ -14,7 +14,7 @@ $controller = new Courcontrollerimpl();
 
 try {
     $course = $controller->getCourseById($courseId);
-    var_dump($course);
+    // var_dump($course);
     if (!$course) {
         // header('Location: cours.php?error=course_not_found');
         exit();

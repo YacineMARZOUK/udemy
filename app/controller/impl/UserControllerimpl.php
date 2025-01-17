@@ -15,14 +15,14 @@ class UserControllerimpl {
     
     public function save(Student|Teacher $person): bool {
         try {
-            if ($person->getRole()->getValue() === Role::STUDENT) {
+            if ($person->getRole() === Role::STUDENT) {
                 $person = new Student(
                     $_POST["email"],
                     $_POST["password"],
                     $_POST["name"],
                     Role::from($_POST["role"]) // Utilisation de la méthode from()
                 );
-            } else if ($person->getRole()->getValue() === Role::TEACHER) {
+            } else if ($person->getRole()=== Role::TEACHER) {
                 $person = new Teacher(
                     $_POST["email"],
                     $_POST["password"],
@@ -38,7 +38,7 @@ class UserControllerimpl {
         }
     }
 
-    public function verifyUser(User $person): array|bool {
+    public function verifyUser(User $person) {
         try {
             $person = new User(
                 $_POST["email"],
@@ -47,7 +47,7 @@ class UserControllerimpl {
                 Role::STUDENT // Utilisation directe de la constante
             );
             
-            return $this->userModel->verifyUser($person);
+            return ($person);
         } catch(Exception $e) {
             error_log("Erreur lors de la vérification de l'utilisateur: " . $e->getMessage());
             return false;
