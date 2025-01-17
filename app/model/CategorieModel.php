@@ -8,8 +8,9 @@ interface CategorieModel
 
     public function updateCategorie(Categorie $categorie): bool;
 
-
     public function countCategorie(): int;
+    
+    public function getAllCategories(): array;
 
 }
 ?>

@@ -1,8 +1,11 @@
 <?php
 
 require_once('../controller/impl/Courcontrollerimpl.php');
+require_once('../controller/impl/CategorieControllerimpl.php');
 $contrl = new Courcontrollerimpl();
 $result = $contrl->fetchCours();
+$Categories = new CategorieControllerimpl();
+$allCategories = $Categories->getAllCategories();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -114,30 +117,44 @@ $result = $contrl->fetchCours();
                 </h2>
 
                 <form action="../controller/base/baseController.php" method="POST" class="max-w-lg mx-auto space-y-6">
-                    <div>
-                        <label for="course_title" class="block text-sm font-medium text-gray-700">Course Title</label>
-                        <input type="text" id="course_title" name="titre" required class="mt-2 p-2 w-full border border-gray-300 rounded-lg" placeholder="Enter the course title">
-                    </div>
+    <div>
+        <label for="course_title" class="block text-sm font-medium text-gray-700">Course Title</label>
+        <input type="text" id="course_title" name="titre" required class="mt-2 p-2 w-full border border-gray-300 rounded-lg" placeholder="Enter the course title">
+    </div>
 
-                    <div>
-                        <label for="student_name" class="block text-sm font-medium text-gray-700">Description</label>
-                        <input type="text" id="student_name" name="description" required class="mt-2 p-2 w-full border border-gray-300 rounded-lg" placeholder="Enter your name">
-                    </div>
+    <div>
+        <label for="student_name" class="block text-sm font-medium text-gray-700">Description</label>
+        <input type="text" id="student_name" name="description" required class="mt-2 p-2 w-full border border-gray-300 rounded-lg" placeholder="Enter your name">
+    </div>
 
-                    <div>
-                        <label for="student_email" class="block text-sm font-medium text-gray-700">video</label>
-                        <input type="text" id="student_email" name="images" required class="mt-2 p-2 w-full border border-gray-300 rounded-lg" placeholder="Enter your email">
-                    </div>
+    <div>
+        <label for="student_email" class="block text-sm font-medium text-gray-700">Video</label>
+        <input type="text" id="student_email" name="images" required class="mt-2 p-2 w-full border border-gray-300 rounded-lg" placeholder="Enter your email">
+    </div>
 
-                    <div>
-                        <label for="contenu" class="block text-sm font-medium text-gray-700">Contenu</label>
-                        <input type="text" id="contenu" name="contenu" required class="mt-2 p-2 w-full border border-gray-300 rounded-lg" placeholder="Enter your phone number">
-                    </div>
+    <div>
+        <label for="contenu" class="block text-sm font-medium text-gray-700">Content</label>
+        <input type="text" id="contenu" name="contenu" required class="mt-2 p-2 w-full border border-gray-300 rounded-lg" placeholder="Enter your phone number">
+    </div>
 
-                    <div class="flex justify-between items-center">
-                        <button type="submit" name="addCour" class="py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">Add cour</button>
-                    </div>
-                </form>
+    <!-- Select for Categories -->
+    <div>
+        <label for="category" class="block text-sm font-medium text-gray-700">Category</label>
+        <select id="category" name="category" required class="mt-2 p-2 w-full border border-gray-300 rounded-lg">
+            <option value="">Select a category</option>
+            <?php
+            foreach ($allCategories as $category) {
+                echo '<option value="' . $category['id'] . '">' . $category['titre'] . '</option>';
+            }
+            ?>
+        </select>
+    </div>
+
+    <div class="flex justify-between items-center">
+        <button type="submit" name="addCour" class="py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">Add Course</button>
+    </div>
+</form>
+
             </div>
         </section>
     </div>

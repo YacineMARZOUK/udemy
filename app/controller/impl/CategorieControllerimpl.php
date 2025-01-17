@@ -35,7 +35,16 @@ require_once 'C:\xampp\htdocs\udemy\app\model\impl\CategorieModelimpl.php';
 public function updateCategorie(Categorie $categorie): bool
 {
     try {
-        return $this->courModel->updateCategorie($id);
+        return $this->categorieModel->updateCategorie($id);
+    } catch (Exception $e) {
+        return false;
+    }
+}
+
+public function getAllCategories(): array
+{
+    try {
+        return $this->categorieModel->getAllCategories();
     } catch (Exception $e) {
         return false;
     }

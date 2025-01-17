@@ -54,5 +54,12 @@ class CategorieModelImpl implements CategorieModel
         return (int) $result->categoryCount;
     }
 
+    public function getAllCategories(): array
+    {
+        $query = "SELECT * FROM categories";
+        $stmt = $this->conn->query($query);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 }
 ?>
