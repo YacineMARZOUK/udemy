@@ -13,35 +13,33 @@ class CourModelimpl implements CourModel
         $this->conn = Database::getInstance()->getConnection();
     }
 
-    public function addCour(Cour $cour): bool
-    {
-
-        $query = "INSERT INTO Cours (titre  , description , contenu , image ) values (:titre , :description, :contenu , :image )";
+    public function addCour(Cour $cour): bool {
+        $query = "INSERT INTO Cours (titre, description, contenu, image, idCategorie) 
+                 VALUES (:titre, :description, :contenu, :image, :idCategorie)";
         try {
             $stmt = $this->conn->prepare($query);
-
-            return $stmt->execute(
-                [
-                    ':titre' => $cour->gettitre(),
-                    ':description' => $cour->getdescription(),
-                    ':contenu' => $cour->getcontenu(),
-                    ':image' => $cour->getimages() ?? "hhhhhhhhh.jpg"
-
-                ]
-            );
-
+            return $stmt->execute([
+                ':titre' => $cour->gettitre(),
+                ':description' => $cour->getdescription(),
+                ':contenu' => $cour->getcontenu(),
+                ':image' => $cour->getimages() ?? "default.jpg",
+                ':idCategorie' => $cour->getIdCategorie()
+            ]);
         } catch (Exception $e) {
-            throw new Exception("error while saving user into database");
+            throw new Exception("Error while saving course into database: " . $e->getMessage());
         }
     }
 
     public function updateCour($course) {
         try {
-            $sql = "UPDATE cours SET titre = ?, description = ? WHERE id = ?";
+            $sql = "UPDATE cours 
+                    SET titre = ?, description = ?, idCategorie = ? 
+                    WHERE id = ?";
             $stmt = $this->conn->prepare($sql);
             return $stmt->execute([
                 $course->getTitre(),
                 $course->getDescription(),
+                $course->getIdCategorie(),
                 $course->getId()
             ]);
         } catch (PDOException $e) {
@@ -55,17 +53,17 @@ class CourModelimpl implements CourModel
             $stmt = $this->conn->prepare($sql);
             $stmt->execute([$id]);
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
-            echo "is created";
-            
+
             if (!$result) {
                 return null;
             }
-            
+
             $course = new Cour(
                 $result['titre'],
                 $result['description'] ?? '',
-                $result['images'] ?? '',
-                $result['contenu'] ?? ''
+                $result['contenu'] ?? '',
+                $result['idCategorie'],
+                $result['image'] ?? ''
             );
             $course->setId($result['id']);
             return $course;
@@ -83,24 +81,23 @@ class CourModelimpl implements CourModel
         $statement->execute();
     }
 
-    public function searchCour(string $searchTerm): array
-    {
-        $query = "SELECT * FROM cours 
-                  WHERE titre LIKE :searchTerm 
-                  OR description LIKE :searchTerm 
-                  OR contenu LIKE :searchTerm";
-    
+    public function searchCour(string $searchTerm): array {
+        $query = "SELECT c.*, cat.titre as category_name 
+                 FROM cours c 
+                 LEFT JOIN categories cat ON c.idCategorie = cat.id
+                 WHERE c.titre LIKE :searchTerm 
+                 OR c.description LIKE :searchTerm 
+                 OR c.contenu LIKE :searchTerm";
+
         try {
             $stmt = $this->conn->prepare($query);
             $search = "%{$searchTerm}%";
             $stmt->bindValue(':searchTerm', $search, PDO::PARAM_STR);
             $stmt->execute();
-            
             return $stmt->fetchAll(PDO::FETCH_OBJ);
         } catch (Exception $e) {
-            // Log the error or return an empty array to avoid breaking the code
             error_log("Error searching courses: " . $e->getMessage());
-            return []; // Return an empty array instead of false
+            return [];
         }
     }
 
@@ -114,15 +111,26 @@ class CourModelimpl implements CourModel
     }
 
     public function getAllCours(): array {
-        $query = "select * from Cours";
+        $query = "SELECT c.*, cat.titre as category_name 
+                 FROM Cours c 
+                 LEFT JOIN categories cat ON c.idCategorie = cat.id";
         $statement = $this->conn->query($query);
-      $result = $statement->fetchAll(PDO::FETCH_OBJ);
-        return  $result;
+        return $statement->fetchAll(PDO::FETCH_OBJ);
     }
 
+    public function getCoursesByCategory(int $categoryId): array {
+        $query = "SELECT * FROM Cours WHERE idCategorie = :categoryId";
+        try {
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindValue(':categoryId', $categoryId, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_OBJ);
+        } catch (Exception $e) {
+            error_log("Error fetching courses by category: " . $e->getMessage());
+            return [];
+        }
     }
 
-
-
+}
 
 ?>

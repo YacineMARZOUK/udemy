@@ -83,25 +83,26 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     //*****************************************************add cour****************************************************************
     if (isset($_POST["addCour"])) {
-        $titre = $_POST["titre"] ?? "";
-        $description = $_POST["description"] ?? "";
-        $images = $_POST["images"] ?? "";
-        $contenu = $_POST["contenu"] ?? "";
-
-        if (empty($titre) || empty($description) || empty($images) || empty($contenu)) {
-            echo "Tous les champs sont requis.";
-            exit();
-        }
-
-        $cour = new Cour($titre, $description, $images, $contenu);
-
-        try {
-            $Courcontroller->addCour($cour);
-            echo "Le cours a été ajouté avec succès.";
-        } catch (Exception $e) {
-            echo "Erreur lors de l'enregistrement : " . $e->getMessage();
-        }
+    $titre = $_POST["titre"] ?? "";
+    $description = $_POST["description"] ?? "";
+    $images = $_POST["images"] ?? "";
+    $contenu = $_POST["contenu"] ?? "";
+    $idCategorie = $_POST["idCategorie"] ?? 0;
+    
+    if (empty($titre) || empty($description) || empty($contenu) || empty($idCategorie)) {
+        echo "Tous les champs sont requis.";
+        exit();
     }
+
+    $cour = new Cour($titre, $description, $contenu, (int)$idCategorie, $images);
+
+    try {
+        $Courcontroller->addCour($cour);
+        header("Location: ../../views/addcours.php");
+    } catch (Exception $e) {
+        echo "Erreur lors de l'enregistrement : " . $e->getMessage();
+    }
+}
 
     //*****************************************************search cours****************************************************************
     if (isset($_POST["search"])) {

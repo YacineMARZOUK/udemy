@@ -5,6 +5,7 @@ require_once('C:\xampp\htdocs\udemy\app\controller\base\baseController.php');
 
 $contrl=new Courcontrollerimpl();
 $result=$contrl->fetchCours();
+var_dump($result);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -166,57 +167,63 @@ $result=$contrl->fetchCours();
 
     <!-- Courses Categories Section  -->
     <section>
-        <div class=" py-10 md:px-12 px-6">
-            <h2 class="text-4xl font-bold text-gray-800 mb-6 text-center md:mb-11">
-                Our ALL <span
-                    class="text-gradient bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-blue-600">Courses</span>
-            </h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                 <?php 
-                     foreach ($result as $cour ) {
+    <div class="py-10 md:px-12 px-6">
+        <h2 class="text-4xl font-bold text-gray-800 mb-6 text-center md:mb-11">
+            Our ALL <span class="text-gradient bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-blue-600">Courses</span>
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <?php foreach ($result as $cour) { ?>
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+                <!-- Category Badge -->
+                <div class="relative">
+                    <img src="/assets/images/cover4.png" alt="Course Image" class="w-full h-48 object-cover">
+                    <span class="absolute top-4 right-4 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+                        <?=$cour->category_name?>
+                    </span>
+                </div>
 
-
+                <!-- Course Content -->
+                <div class="p-6">
+                    <!-- Course Title -->
+                    <h3 class="text-xl font-bold text-gray-800 mb-2"><?=$cour->titre?></h3>
                     
-                 ?>
-                <div
-                    class="bg-white border border-blue-600 rounded-lg shadow-md p-4 hover:scale-105 transition-transform">
-                    <img src="/assets/images/cover4.png" alt="Course Image" class="rounded-t-lg w-full">
-                    <div class="py-3">
-                        <p class="text-sm text-gray-500 flex items-center space-x-2">
-                            <span><i class="ri-calendar-line"></i> 20 Nov, 2023</span>
-                            <span><i class="ri-file-list-line"></i> 3 Curriculum</span>
-                            <span><i class="ri-group-line"></i> 5 Students</span>
-                        </p>
-                        <h3 class="text-lg font-semibold text-gray-800 mt-2"></h3>
-                        <p class="text-gray-600 text-sm mt-1">
-                        <?=$cour->description?>
-                        </p>
-                        <div class="flex items-center justify-between mt-3">
-                            <p class="text-blue-600 font-bold"><?=$cour->contenu?></p>
-                            <p class="text-blue-600 flex items-center"><i class="ri-star-fill"></i><?=$cour->titre?> </p>
-                        </div>
+                    <!-- Course Meta -->
+                    <div class="flex items-center text-sm text-gray-500 mb-4 space-x-4">
+                        <span class="flex items-center">
+                            <i class="ri-calendar-line mr-1"></i> 
+                            <span>20 Nov, 2023</span>
+                        </span>
+                        <span class="flex items-center">
+                            <i class="ri-file-list-line mr-1"></i>
+                            <span>3 Modules</span>
+                        </span>
+                        <span class="flex items-center">
+                            <i class="ri-group-line mr-1"></i>
+                            <span>5 Students</span>
+                        </span>
                     </div>
-                    <div class="mt-4">
-                       <button class="w-full py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors">
-                         Enroll Now
-                      </button>
+
+                    <!-- Course Description -->
+                    <p class="text-gray-600 mb-4 line-clamp-2">
+                        <?=$cour->description?>
+                    </p>
+
+                    <!-- Course Footer -->
+                    <div class="flex items-center justify-between pt-4 border-t border-gray-100">
+                        <div class="flex items-center space-x-1">
+                            <i class="ri-star-fill text-yellow-400"></i>
+                            <span class="font-semibold"><?=$cour->contenu?></span>
+                        </div>
+                        <button class="px-6 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors font-medium">
+                            Enroll Now
+                        </button>
                     </div>
                 </div>
-                <?php
-                     }
-                     ?>
-
-                
-               
-
-                
-                
-
-                
             </div>
+            <?php } ?>
         </div>
-
-    </section>
+    </div>
+</section>
 
 
 
@@ -225,7 +232,7 @@ $result=$contrl->fetchCours();
    
 
     <!-- FAQs Section -->
-    <section>
+    <section class="mt-[120px]">
         <div class="py-10 md:px-12 px-6">
             <div class="flex flex-wrap justify-center items-center mb-12 text-center">
                 <h2 class="text-3xl font-bold text-gray-800">

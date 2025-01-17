@@ -6,12 +6,14 @@ class Cour {
     private string $description;
     private string $images;
     private string $contenu;
+    private int $idCategorie; // Added field
 
-    public function __construct(string $titre, string $description, string $contenu, string $images = "default.jpg") {
+    public function __construct(string $titre, string $description, string $contenu, int $idCategorie, string $images = "default.jpg") {
         $this->titre = $titre;
         $this->description = $description;
         $this->contenu = $contenu;
-        $this->images = $images; // Initialize $images
+        $this->images = $images;
+        $this->idCategorie = $idCategorie;
     }
 
     public function getId(): int {
@@ -52,6 +54,13 @@ class Cour {
 
     public function setimage(string $images): void {
         $this->images = $images;
+    }
+    public function getIdCategorie(): int {
+        return $this->idCategorie;
+    }
+
+    public function setIdCategorie(int $idCategorie): void {
+        $this->idCategorie = $idCategorie;
     }
 }
 ?>

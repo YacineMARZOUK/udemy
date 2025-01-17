@@ -159,64 +159,69 @@ $result=$contrl->fetchCours();
     <!-- Courses Grid Section -->
 
     <section>
-        <div class=" py-10 md:px-12 px-6">
-            <h2 class="text-4xl font-bold text-gray-800 mb-6 text-center md:mb-11">
-                Our ALL <span
-                    class="text-gradient bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-blue-600">Courses</span>
-            </h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <?php 
-                foreach ($result as $cour) {
-                ?>
-                    <div class="bg-white border border-blue-600 rounded-lg shadow-md p-4 hover:scale-105 transition-transform">
-                        <img src="/assets/images/cover4.png" alt="Course Image" class="rounded-t-lg w-full">
-                        <div class="py-3">
-                            <p class="text-sm text-gray-500 flex items-center space-x-2">
-                                <span><i class="ri-calendar-line"></i> 20 Nov, 2023</span>
-                                <span><i class="ri-file-list-line"></i> 3 Curriculum</span>
-                                <span><i class="ri-group-line"></i> 5 Students</span>
+    <div class="py-10 md:px-12 px-6">
+        <h2 class="text-4xl font-bold text-gray-800 mb-6 text-center md:mb-11">
+            Our ALL <span class="text-gradient bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-blue-600">Courses</span>
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <?php foreach ($result as $cour) { ?>
+                <div class="bg-white border border-blue-600 rounded-lg shadow-md p-4 hover:scale-105 transition-transform relative">
+                    <!-- Category badge positioned at top-right -->
+                    <span class="absolute top-6 right-6 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-semibold z-10">
+                        <?=$cour->category_name?>
+                    </span>
+
+                    <!-- Image container with fixed height -->
+                    <div class="h-48 overflow-hidden rounded-t-lg mb-4">
+                        <img src="/assets/images/cover4.png" alt="Course Image" class="w-full h-full object-cover">
+                    </div>
+
+                    <div class="py-3">
+                        <p class="text-sm text-gray-500 flex items-center space-x-2">
+                            <span><i class="ri-calendar-line"></i> 20 Nov, 2023</span>
+                            <span><i class="ri-file-list-line"></i> 3 Curriculum</span>
+                            <span><i class="ri-group-line"></i> 5 Students</span>
+                        </p>
+                        <h3 class="text-lg font-semibold text-gray-800 mt-2"><?=$cour->titre?></h3>
+                        <p class="text-gray-600 text-sm mt-1 line-clamp-2">
+                            <?=$cour->description?>
+                        </p>
+                        <div class="flex items-center justify-between mt-3">
+                            <p class="text-blue-600 font-bold"><?=$cour->contenu?></p>
+                            <p class="text-blue-600 flex items-center">
+                                <i class="ri-star-fill text-yellow-400 mr-1"></i>
+                                <span><?=$cour->titre?></span>
                             </p>
-                            <h3 class="text-lg font-semibold text-gray-800 mt-2"></h3>
-                            <p class="text-gray-600 text-sm mt-1">
-                                <?=$cour->description?>
-                            </p>
-                            <div class="flex items-center justify-between mt-3">
-                                <p class="text-blue-600 font-bold"><?=$cour->contenu?></p>
-                                <p class="text-blue-600 flex items-center"><i class="ri-star-fill"></i><?=$cour->titre?> </p>
-                            </div>
-                        </div>
-
-                        <div class="mt-4 flex space-x-4-">
-                            <!-- Enroll Now button -->
-                            <button class="w-full py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors">
-                                 Enroll Now
-                            </button>
-
-                            <!-- Delete button -->
-                            <form action="../controller/base/baseController.php" method="POST" onsubmit="return confirm('Are you sure you want to delete this course?');" class="w-full">
-                                 <input type="hidden" name="deletCour" value="<?=$cour->id?>">
-                                 <button type="submit" class="w-full py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition-colors">
-                                   Delete
-                                 </button>
-                            </form>
-
-
-                            <!-- Update button -->
-                            <button 
-                                 class="w-full py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition-colors"
-                                 name="updateCour"
-                                  onclick="window.location.href='update_course.php?id=<?=$cour->id?>'">
-                                  Update
-                            </button>
                         </div>
                     </div>
-                <?php
-                }
-                ?>
-            </div>
-        </div>
-    </section>
 
+                    <div class="mt-4 grid grid-cols-3 gap-2">
+                        <!-- Enroll Now button -->
+                        <button class="py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors">
+                            Enroll Now
+                        </button>
+
+                        <!-- Delete button -->
+                        <form action="../controller/base/baseController.php" method="POST" onsubmit="return confirm('Are you sure you want to delete this course?');">
+                            <input type="hidden" name="deletCour" value="<?=$cour->id?>">
+                            <button type="submit" class="w-full py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition-colors">
+                                Delete
+                            </button>
+                        </form>
+
+                        <!-- Update button -->
+                        <button 
+                            class="py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition-colors"
+                            name="updateCour"
+                            onclick="window.location.href='update_course.php?id=<?=$cour->id?>'">
+                            Update
+                        </button>
+                    </div>
+                </div>
+            <?php } ?>
+        </div>
+    </div>
+</section>
     <!-- Footer Section -->
 
     <footer class="bg-blue-10 py-16 ">

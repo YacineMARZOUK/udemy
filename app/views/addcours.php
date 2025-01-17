@@ -140,7 +140,7 @@ $allCategories = $Categories->getAllCategories();
     <!-- Select for Categories -->
     <div>
         <label for="category" class="block text-sm font-medium text-gray-700">Category</label>
-        <select id="category" name="category" required class="mt-2 p-2 w-full border border-gray-300 rounded-lg">
+        <select id="category" name="idCategorie" required class="mt-2 p-2 w-full border border-gray-300 rounded-lg">
             <option value="">Select a category</option>
             <?php
             foreach ($allCategories as $category) {
