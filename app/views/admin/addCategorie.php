@@ -45,7 +45,7 @@
         <header class="border-b bg-white">
             <div class="container mx-auto px-4">
                 <div class="flex items-center justify-between py-4">
-                    <a href="./index.php">
+                    <a href="C:\xampp\htdocs\udemy\app\controller\base\baseController.php?action=index">
                         <img src="./assets/images/Youdemy_Logo.svg" alt="Youdemy Platform">
                     </a>
                     <nav class="hidden md:flex items-center space-x-6">

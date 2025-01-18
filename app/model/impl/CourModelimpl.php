@@ -136,6 +136,34 @@ class CourModelimpl implements CourModel
             return [];
         }
     }
+    
+    public function enrollUserInCourse($userId, $courseId) {
+        try {
+            $connection = Database::getInstance()->getConnection();
+            
+            // Vérifier si l'utilisateur est déjà inscrit
+            $checkQuery = "SELECT id FROM enrolled WHERE iduser = ? AND idcour = ?";
+            $checkStmt = $connection->prepare($checkQuery);
+            $checkStmt->execute([$userId, $courseId]);
+            
+            if ($checkStmt->rowCount() > 0) {
+                return ["success" => false, "message" => "You are already enrolled in this course"];
+            }
+            
+            // Procéder à l'inscription
+            $query = "INSERT INTO enrolled (iduser, idcour, created_at) VALUES (?, ?, NOW())";
+            $stmt = $connection->prepare($query);
+            $result = $stmt->execute([$userId, $courseId]);
+            
+            if ($result) {
+                return ["success" => true, "message" => "Successfully enrolled in the course"];
+            } else {
+                return ["success" => false, "message" => "Failed to enroll in the course"];
+            }
+        } catch (PDOException $e) {
+            return ["success" => false, "message" => "Database error: " . $e->getMessage()];
+        }
+    }
 
 }
 

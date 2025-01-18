@@ -8,11 +8,14 @@ require_once 'C:\xampp\htdocs\udemy\app\entities\Teacher.php';
 require_once 'C:\xampp\htdocs\udemy\app\enums\Role.php';
 
 session_start();
-
+echo'hhhhhhhh';
 $userController = new UserControllerimpl();
 $Courcontroller = new Courcontrollerimpl();
 $Categoriecontroller = new CategorieControllerimpl();
-
+$acion= $_GET["action"];
+if($action = 'index'){
+    require_once('C:\xampp\htdocs\udemy\index.php');
+}
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     ///////////  UserProcess   //////////
 
@@ -57,6 +60,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $password = $_POST['password'] ?? '';
         
         if (empty($email) || empty($password)) {
+            echo $email ;
             echo "Email et mot de passe sont requis.";
             exit();
         }
@@ -65,12 +69,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $person = new User($email, $password, $name = '', Role::STUDENT); // Vous pouvez ajuster selon votre rôle
         try {
             // Appeler verifyUser pour vérifier si l'utilisateur existe
+            echo '<pre>';
+            var_dump( $person );
+            echo '</pre>';
+            
             $userData = $userController->verifyUser($person);
 
             if ($userData) {
                 $_SESSION["user"] = $userData;
-                
-                require_once("../../../index.php");
+                echo '<pre>';
+                var_dump( $_SESSION["user"] );
+                echo '</pre>';
+                require_once("../../views/coursStudent.php");
                 exit();
             } else {
                 // Email ou mot de passe incorrect
@@ -166,6 +176,38 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     if (isset($_POST["deleteStudent"])) {
       
+    }
+
+
+    if (isset($_POST['enrollCourse'])) {
+        // Vérifier si l'utilisateur est connecté
+        if (!isset($_SESSION['user'])) {
+            $_SESSION['error_message'] = "Please login to enroll in courses";
+            header("Location: ../../user/login.php");
+            exit();
+        }
+        
+        $courseId = isset($_POST['course_id']) ? (int)$_POST['course_id'] : 0;
+        $userId = $_SESSION['user']->getId();
+        
+        if ($courseId <= 0) {
+            $_SESSION['error_message'] = "Invalid course selection";
+            header("Location: ../../views/cours.php");
+            exit();
+        }
+        
+        // Fix: Use correct controller variable name
+        $Courcontroller = new Courcontrollerimpl();  // Make sure this matches your controller name
+        $result = $Courcontroller->enrollUserInCourse($userId, $courseId);
+        
+        if ($result['success']) {
+            $_SESSION['success_message'] = $result['message'];
+        } else {
+            $_SESSION['error_message'] = $result['message'];
+        }
+        
+        header("Location: ../../views/cours.php");
+        exit();
     }
 }
 

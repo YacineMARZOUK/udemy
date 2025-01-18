@@ -1,12 +1,12 @@
 <?php
 
-require_once('../controller/impl/Courcontrollerimpl.php');
+require_once('C:\xampp\htdocs\udemy\app\controller\impl\Courcontrollerimpl.php');
 require_once('C:\xampp\htdocs\udemy\app\controller\base\baseController.php'); 
 $contrl=new Courcontrollerimpl();
 $result=$contrl->fetchCours();
 
 
-
+phpinfo();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -205,9 +205,12 @@ $result=$contrl->fetchCours();
                             <i class="ri-star-fill text-yellow-400"></i>
                             <span class="font-semibold"><?=$cour->contenu?></span>
                         </div>
-                        <button class="px-6 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors font-medium">
-                            Enroll Now
-                        </button>
+                        <form action="../controller/base/baseController.php" method="POST">
+    <input type="hidden" name="course_id" value="<?= $cour->id?>">
+    <button type="submit" name="enrollCourse" class="px-6 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors font-medium">
+        Enroll Now
+    </button>
+</form>
                     </div>
                 </div>
             </div>

@@ -6,6 +6,9 @@ require_once('C:\xampp\htdocs\udemy\app\controller\base\baseController.php');
 $contrl=new Courcontrollerimpl();
 $result=$contrl->fetchCours();
 var_dump($result);
+if($_SESSION['user']){
+    header('location :C:\xampp\htdocs\udemy\app\views\coursStudent.php');
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">

@@ -89,6 +89,14 @@ public function getCourseById(int $id): ?object
         return null;
     }
 }
+public function enrollUserInCourse($userId, $courseId)
+{
+    try {
+        return $this->courModel->enrollUserInCourse($userId, $courseId);
+    } catch (Exception $e) {
+        return null;
+    }
+}
 
 
 
