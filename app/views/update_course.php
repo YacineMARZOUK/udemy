@@ -1,27 +1,21 @@
 <?php
+// updateCourse.php
 session_start();
 require_once('../controller/impl/Courcontrollerimpl.php');
 
 // Get course ID from URL and validate it
 $courseId = isset($_GET['id']) ? (int)$_GET['id'] : null;
-echo $courseId;
+
 if (!$courseId) {
     header('Location: cours.php?error=invalid_id');
     exit();
 }
 
 $controller = new Courcontrollerimpl();
+$course = $controller->getCourseById($courseId);
 
-try {
-    $course = $controller->getCourseById($courseId);
-    // var_dump($course);
-    if (!$course) {
-        // header('Location: cours.php?error=course_not_found');
-        exit();
-    }
-} catch (Exception $e) {
-    error_log("Error fetching course: " . $e->getMessage());
-    header('Location: cours.php?error=system_error');
+if (!$course) {
+    header('Location: cours.php?error=course_not_found');
     exit();
 }
 ?>
@@ -40,14 +34,14 @@ try {
             <h2 class="text-2xl font-bold text-center mb-6">Update Course</h2>
             
             <form action="../controller/base/baseController.php" method="POST" class="space-y-4">
-                <input type="hidden" name="courseId" value="<?php echo htmlspecialchars($courseId); ?>">
+                <input type="hidden" name="courseId" value="<?php echo htmlspecialchars($course->getId()); ?>">
                 
                 <div class="mb-4">
                     <label for="titre" class="block text-gray-700 font-medium mb-2">Title</label>
                     <input type="text"
                            id="titre"
                            name="titre"
-                           value="<?php echo htmlspecialchars($course->getTitre()); ?>"
+                           value="<?php echo htmlspecialchars($course->gettitre()); ?>"
                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
                            required>
                 </div>
@@ -57,7 +51,7 @@ try {
                     <textarea id="description"
                             name="description"
                             class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
-                            required><?php echo htmlspecialchars($course->getDescription()); ?></textarea>
+                            required><?php echo htmlspecialchars($course->getdescription()); ?></textarea>
                 </div>
 
                 <button type="submit"
@@ -66,7 +60,7 @@ try {
                     Update Course
                 </button>
                 
-                <a href="cours.php" 
+                <a href="cours.php"
                    class="block w-full text-center mt-4 text-blue-600 hover:text-blue-700">
                     Cancel
                 </a>

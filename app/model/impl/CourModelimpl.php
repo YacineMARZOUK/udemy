@@ -33,16 +33,21 @@ class CourModelimpl implements CourModel
     public function updateCour($course) {
         try {
             $sql = "UPDATE cours 
-                    SET titre = ?, description = ?, idCategorie = ? 
-                    WHERE id = ?";
+                    SET titre = :titre, 
+                        description = :description,
+                        contenu = :contenu,
+                        updated_at = CURRENT_TIMESTAMP
+                    WHERE id = :id";
+                    
             $stmt = $this->conn->prepare($sql);
             return $stmt->execute([
-                $course->getTitre(),
-                $course->getDescription(),
-                $course->getIdCategorie(),
-                $course->getId()
+                ':titre' => $course->getTitre(),
+                ':description' => $course->getDescription(),
+                ':contenu' => $course->getContenu(),
+                ':id' => $course->getId()
             ]);
         } catch (PDOException $e) {
+            error_log("Database error: " . $e->getMessage());
             throw new Exception("Error updating course: " . $e->getMessage());
         }
     }
@@ -62,8 +67,9 @@ class CourModelimpl implements CourModel
                 $result['titre'],
                 $result['description'] ?? '',
                 $result['contenu'] ?? '',
-                $result['idCategorie'],
+                $result['idcategorie'],
                 $result['image'] ?? ''
+                
             );
             $course->setId($result['id']);
             return $course;
@@ -104,7 +110,7 @@ class CourModelimpl implements CourModel
 
     public function countCour(): int
     {
-        $query = "SELECT COUNT(*) AS CourCount FROM Cour";
+        $query = "SELECT COUNT(*) AS CourCount FROM Cours";
         $statement = $this->conn->query($query);
         $result = $statement->fetch(PDO::FETCH_OBJ);
         return (int) $result->CourCount;

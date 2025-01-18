@@ -132,27 +132,32 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
       if (isset($_POST['updateCourseSubmit'])) {
         $courseId = isset($_POST['courseId']) ? (int)$_POST['courseId'] : 0;
         $titre = $_POST['titre'] ?? '';
-        $description = $_POST['description'] ?? ''; // Add other fields as needed
+        $description = $_POST['description'] ?? '';
+        $contenu = $_POST['contenu'] ?? '';
         
-        if ($courseId <= 0 || empty($titre)) {
-            header("Location: ../../views/cours.php?error=invalid_input");
+        if ($courseId <= 0 || empty($titre) || empty($description)) {
+            $_SESSION['error'] = "All fields are required";
+            header("Location: ../../views/update_course.php?id=" . $courseId);
             exit();
         }
         
         try {
-            $updatedCourse = new Cour($titre, $description, '', ''); // Adjust constructor parameters as needed
+            $updatedCourse = new Cour($titre, $description, $contenu, 0, '');
             $updatedCourse->setId($courseId);
             
             $result = $Courcontroller->updateCour($updatedCourse);
+            
             if ($result) {
-                header("Location: ../../views/cours.php?success=updated");
+                $_SESSION['success'] = "Course updated successfully";
+                header("Location: ../../views/cours.php");
             } else {
-                header("Location: ../../views/cours.php?error=update_failed");
+                $_SESSION['error'] = "Failed to update course";
+                header("Location: ../../views/update_course.php?id=" . $courseId);
             }
             exit();
         } catch (Exception $e) {
-            error_log("Error updating course: " . $e->getMessage());
-            header("Location: ../../views/cours.php?error=system_error");
+            $_SESSION['error'] = "System error: " . $e->getMessage();
+            header("Location: ../../views/update_course.php?id=" . $courseId);
             exit();
         }
     }

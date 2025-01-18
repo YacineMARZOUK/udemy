@@ -8,6 +8,8 @@ $statisResult =$statis->countUser();
 
 $contrl=new Courcontrollerimpl();
 $result=$contrl->fetchCours();
+$allcours=$contrl->countCour();
+
 
 
 ?>
@@ -139,7 +141,7 @@ $result=$contrl->fetchCours();
                     <!-- Number of Courses -->
                     <div class="bg-white border border-blue-600 rounded-lg p-6 text-center">
                         <h3 class="text-xl font-semibold text-gray-800">Total Courses</h3>
-                        <p class="text-2xl font-bold text-blue-600"><?= $statistics['total_courses'] ?? 0 ?></p>
+                        <p class="text-2xl font-bold text-blue-600"><?= $allcours ?></p>
                     </div>
 
                     <!-- Number of Students -->

@@ -46,6 +46,19 @@ require_once 'C:\xampp\htdocs\udemy\app\model\impl\CourModelimpl.php';
             return false ;
 
     }
+}
+
+ public function countCour(){
+        try {
+           return $this->courModel->countCour();
+           
+            
+     
+        }
+        catch (Exception $e) {
+            return false ;
+
+    }
 
 
 
@@ -59,10 +72,10 @@ require_once 'C:\xampp\htdocs\udemy\app\model\impl\CourModelimpl.php';
             return false ;
     }
     }
-public function updateCour($id): bool
+public function updateCour($course): bool
 {
     try {
-        return $this->courModel->updateCour($id);
+        return $this->courModel->updateCour($course);
     } catch (Exception $e) {
         return false;
     }
