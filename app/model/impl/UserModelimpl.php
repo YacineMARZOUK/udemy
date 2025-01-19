@@ -57,13 +57,16 @@ class UserModelimpl implements UserModel
             throw new Exception("Error fetching users: " . $e->getMessage());
         }
     }
-    public function verifyEmail(string $email): bool
+    public function verifyEmail(string $email)
     {
         $query = "SELECT * FROM users WHERE email = :email";
         $statement = $this->conn->prepare($query);
         $statement->bindParam(':email', $email);
         $statement->execute();
-        return $statement->fetch(PDO::FETCH_ASSOC) === false;
+       $result =$statement->fetch(PDO::FETCH_ASSOC);
+       var_dump($result);
+      return new User( $result["email"], $result['password'], $result['nom'] , $result['role'] );
+
     }
     public function verifyUser(User $user): array|bool
     {

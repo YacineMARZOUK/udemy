@@ -32,7 +32,7 @@ class User {
         return $this->password;
     }
 
-    public function getRole(): Role {
+    public function getRole() {
         return $this->role;
     }
 
@@ -52,7 +52,7 @@ class User {
         $this->password = $password;
     }
 
-    public function setRole(Role $role): void {
+    public function setRole( $role): void {
         $this->role = $role;
     }
 

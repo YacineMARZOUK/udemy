@@ -5,9 +5,9 @@ interface UserModel
 
     public function fetchUsers(): array;
 
-    public function verifyEmail(string $email): bool ;
+    public function verifyEmail(string $email) ;
 
-    public function verifyUser(User $user): array|bool;
+    public function verifyUser(User $user);
 
     public function countUser(): int;
 }

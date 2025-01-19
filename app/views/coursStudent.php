@@ -6,7 +6,7 @@ $contrl=new Courcontrollerimpl();
 $result=$contrl->fetchCours();
 
 
-phpinfo();
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

@@ -1,5 +1,5 @@
 <?php
-require_once 'C:xampp\htdocs\udemy\app\controller\impl\UserControllerimpl.php';
+require_once 'C:\xampp\htdocs\udemy\app\controller\impl\UserControllerimpl.php';
 require_once 'C:\xampp\htdocs\udemy\app\controller\impl\Courcontrollerimpl.php';
 require_once 'C:\xampp\htdocs\udemy\app\controller\impl\CategorieControllerimpl.php';
 require_once 'C:\xampp\htdocs\udemy\app\entities\User.php';
@@ -8,14 +8,11 @@ require_once 'C:\xampp\htdocs\udemy\app\entities\Teacher.php';
 require_once 'C:\xampp\htdocs\udemy\app\enums\Role.php';
 
 session_start();
-echo'hhhhhhhh';
+
 $userController = new UserControllerimpl();
 $Courcontroller = new Courcontrollerimpl();
 $Categoriecontroller = new CategorieControllerimpl();
-$acion= $_GET["action"];
-if($action = 'index'){
-    require_once('C:\xampp\htdocs\udemy\index.php');
-}
+
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     ///////////  UserProcess   //////////
 
@@ -56,6 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     if (isset($_POST['login'])) {
         // Assurez-vous que les champs email et mot de passe sont fournis
+       echo 'ggg';
         $email = $_POST['email'] ?? '';
         $password = $_POST['password'] ?? '';
         
@@ -66,22 +64,36 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
 
         // Créez l'objet $person en utilisant les données du formulaire
-        $person = new User($email, $password, $name = '', Role::STUDENT); // Vous pouvez ajuster selon votre rôle
-        try {
-            // Appeler verifyUser pour vérifier si l'utilisateur existe
-            echo '<pre>';
-            var_dump( $person );
-            echo '</pre>';
-            
-            $userData = $userController->verifyUser($person);
-
+       
+       echo "<pre>";
+       echo "</pre>";// Vous pouvez ajuster selon votre rôle
+       try {
+           // Appeler verifyUser pour vérifier si l'utilisateur existe
+           
+           $person = new User($email, $password, $name = '',Role::STUDENT); 
+           echo $person->getEmail();
+           var_dump($person);
+            $userData = $userController->verifyUser( $person);
+            echo "<br>".$userData->getRole();
+            $person->setRole( $userData->getRole());
             if ($userData) {
-                $_SESSION["user"] = $userData;
-                echo '<pre>';
-                var_dump( $_SESSION["user"] );
-                echo '</pre>';
-                require_once("../../views/coursStudent.php");
-                exit();
+                if($userData->getRole()==Role::STUDENT){
+                    $_SESSION["user"] = $userData;
+                
+                    header('location:../../views/coursStudent.php');
+                    exit();
+                }elseif($userData->getRole()==Role::TEACHER){
+                    $_SESSION["user"] = $userData;
+                
+                    header('location:../../views/cours.php');
+                    exit();
+                }else{
+                    $_SESSION["user"] = $userData;
+                
+                    header('location:../../views/admin/addCategorie.php');
+                    exit();
+                }
+                
             } else {
                 // Email ou mot de passe incorrect
                 echo "Email ou mot de passe incorrect.";

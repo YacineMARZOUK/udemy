@@ -39,15 +39,13 @@ class UserControllerimpl {
     }
 
     public function verifyUser(User $person) {
+        var_dump($person);
+        $email = $person->getEmail();
         try {
-            $person = new User(
-                $_POST["email"],
-                $_POST["password"],
-                '',
-                Role::STUDENT // Utilisation directe de la constante
-            );
+           $obj = $this->userModel->verifyEmail( $email);
             
-            return ($person);
+            
+            return ($obj);
         } catch(Exception $e) {
             error_log("Erreur lors de la vérification de l'utilisateur: " . $e->getMessage());
             return false;
