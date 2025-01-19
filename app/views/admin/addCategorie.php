@@ -122,6 +122,24 @@
                 </form>
             </div>
         </section>
+        <section>
+            <div class="py-10 md:px-12 px-6">
+                <h2 class="text-4xl font-bold text-gray-800 mb-6 text-center md:mb-11">
+                    Add a New Tag
+                </h2>
+
+                <form action="../../controller/base/baseController.php" method="POST" class="max-w-lg mx-auto space-y-6">
+                    <div>
+                        <label for="tagName" class="block text-sm font-medium text-gray-700">Tag Name</label>
+                        <input type="text" id="tagName" name="tagName" required class="mt-2 p-2 w-full border border-gray-300 rounded-lg" placeholder="Enter the tag name">
+                    </div>
+
+                    <div class="flex justify-between items-center">
+                        <button type="submit" name="addTag" class="py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">Add Tag</button>
+                    </div>
+                </form>
+            </div>
+        </section>
     </div>
 
     <!-- Footer Section -->

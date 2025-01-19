@@ -2,9 +2,11 @@
 require_once 'C:\xampp\htdocs\udemy\app\controller\impl\UserControllerimpl.php';
 require_once 'C:\xampp\htdocs\udemy\app\controller\impl\Courcontrollerimpl.php';
 require_once 'C:\xampp\htdocs\udemy\app\controller\impl\CategorieControllerimpl.php';
+require_once 'C:\xampp\htdocs\udemy\app\controller\impl\TagControllerimpl.php';
 require_once 'C:\xampp\htdocs\udemy\app\entities\User.php';
 require_once 'C:\xampp\htdocs\udemy\app\entities\Student.php';
 require_once 'C:\xampp\htdocs\udemy\app\entities\Teacher.php';
+require_once 'C:\xampp\htdocs\udemy\app\entities\Tags.php';
 require_once 'C:\xampp\htdocs\udemy\app\enums\Role.php';
 
 session_start();
@@ -12,6 +14,7 @@ session_start();
 $userController = new UserControllerimpl();
 $Courcontroller = new Courcontrollerimpl();
 $Categoriecontroller = new CategorieControllerimpl();
+$TagController = new TagControllerimpl();
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     ///////////  UserProcess   //////////
@@ -187,11 +190,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 
 
-    if (isset($_POST["deleteStudent"])) {
-      
-    }
-
-
     if (isset($_POST['enrollCourse'])) {
         // Vérifier si l'utilisateur est connecté
         if (!isset($_SESSION['user'])) {
@@ -248,6 +246,30 @@ if (isset($_POST["addCategory"])) {
         echo "Erreur lors de l'enregistrement : " . $e->getMessage();
     }
 }
+
+//*******************************************************************add categorie********************************************** */
+
+if(isset($_POST["addTag"])){
+    $tagName = $_POST["tagName"] ?? "";
+
+    if(empty($tagName)){
+        echo "le champs de tag est requis.";
+        exit();
+    }
+    $Tag = new Tag($tagName);
+    try {
+        $TagController->addTag($Tag);
+
+    } catch (Exception $e) {
+        echo "Erreur lors de l'enregistrement de Tag : " . $e->getMessage();    }
+}
+
+
+
+
+
+
+
 //************************************************************************   GET     ********************************************************* */
 if ($_SERVER["REQUEST_METHOD"] === "GET") {
     if (isset($_GET["getUsers"])) {

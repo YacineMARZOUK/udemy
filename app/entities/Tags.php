@@ -12,10 +12,10 @@ class Tag {
     public function setId(int $id): void {
         $this->id = $id;
     }
-    public function getnom(): string {  
+    public function getNom(): string {  
         return $this->nom;
     }
-    public function setnom(string $nom): void {
+    public function setNom(string $nom): void {
         $this->nom = $nom;
     }
 
