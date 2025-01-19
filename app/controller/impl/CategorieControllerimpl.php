@@ -11,9 +11,6 @@ require_once 'C:\xampp\htdocs\udemy\app\model\impl\CategorieModelimpl.php';
     public function addCategorie($categorie){
         try {
            return $this->categorieModel->addCategorie( $categorie);
-           
-            
-     
         }
         catch (Exception $e) {
             return false ;

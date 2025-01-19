@@ -4,7 +4,11 @@ require_once('C:\xampp\htdocs\udemy\app\controller\impl\Courcontrollerimpl.php')
 require_once('C:\xampp\htdocs\udemy\app\controller\base\baseController.php'); 
 $contrl=new Courcontrollerimpl();
 $result=$contrl->fetchCours();
-
+if(isset( $_SESSION['searchResults']))
+{
+    $result =  $_SESSION['searchResults'];
+    unset( $_SESSION['searchResults']);
+}
 
 
 ?>
@@ -140,7 +144,6 @@ $result=$contrl->fetchCours();
             <input 
                 type="text" 
                 name="search" 
-                onchange="this.form.submit()"
                 placeholder="Enter course name or keyword" 
                 class="w-full max-w-lg px-4 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-600" 
             />

@@ -87,26 +87,33 @@ class CourModelimpl implements CourModel
         $statement->execute();
     }
 
-    public function searchCour(string $searchTerm): array {
+    public function searchCour($searchTerm) {
+        $searchW = "%" . $searchTerm . "%";  // Add wildcards to the search term
+    
         $query = "SELECT c.*, cat.titre as category_name 
-                 FROM cours c 
-                 LEFT JOIN categories cat ON c.idCategorie = cat.id
-                 WHERE c.titre LIKE :searchTerm 
-                 OR c.description LIKE :searchTerm 
-                 OR c.contenu LIKE :searchTerm";
-
+                  FROM cours c 
+                  LEFT JOIN categories cat ON c.idCategorie = cat.id
+                  WHERE c.titre LIKE :searchTerm 
+                  OR c.description LIKE :searchTerms 
+                  OR c.contenu LIKE :searchTerma";
+        
         try {
             $stmt = $this->conn->prepare($query);
-            $search = "%{$searchTerm}%";
-            $stmt->bindValue(':searchTerm', $search, PDO::PARAM_STR);
+    
+            // Bind the same parameter for each occurrence of :searchTerm
+            $stmt->bindParam(':searchTerm', $searchW, PDO::PARAM_STR);
+            $stmt->bindParam(':searchTerms', $searchW, PDO::PARAM_STR);
+            $stmt->bindParam(':searchTerma', $searchW, PDO::PARAM_STR);
+    
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_OBJ);
         } catch (Exception $e) {
             error_log("Error searching courses: " . $e->getMessage());
-            return [];
+            error_log("Query: " . $query);
+            return "Error searching courses: " . $e->getMessage();
         }
     }
-
+    
 
     public function countCour(): int
     {

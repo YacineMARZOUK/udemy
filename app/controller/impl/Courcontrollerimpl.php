@@ -12,8 +12,6 @@ require_once 'C:\xampp\htdocs\udemy\app\model\impl\CourModelimpl.php';
         try {
             $result=$this->courModel->getAllCours();
             return $result;
-            
-     
         }
         catch (Exception $e) {
             return false ;
@@ -37,10 +35,7 @@ require_once 'C:\xampp\htdocs\udemy\app\model\impl\CourModelimpl.php';
  }
  public function searchCour($searchTerm){
         try {
-           return $this->courModel->searchCour( $searchTerm);
-           
-            
-     
+           return $this->courModel->searchCour($searchTerm);
         }
         catch (Exception $e) {
             return false ;

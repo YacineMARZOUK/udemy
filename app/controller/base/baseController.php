@@ -128,11 +128,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     //*****************************************************search cours****************************************************************
     if (isset($_POST["search"])) {
+        echo "ana";
         $searchTerm = $_POST["search"] ?? "";
-
+        
         if (!empty($searchTerm)) {
             $searchResults = $Courcontroller->searchCour($searchTerm);
-
+            print_r($searchResults);
             $_SESSION['searchResults'] = $searchResults;
 
             header("Location: ../../views/coursStudent.php");
