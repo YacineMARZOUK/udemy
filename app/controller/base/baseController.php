@@ -241,8 +241,8 @@ if (isset($_POST["addCategory"])) {
     try {
         
         $Categoriecontroller->addCategorie($Categorie);
-        echo "Le cours a été ajouté avec succès.";
-    } catch (Exception $e) {
+        header("Location: ../../views/admin/addCategorie.php");
+        } catch (Exception $e) {
         echo "Erreur lors de l'enregistrement : " . $e->getMessage();
     }
 }
@@ -259,6 +259,8 @@ if(isset($_POST["addTag"])){
     $Tag = new Tag($tagName);
     try {
         $TagController->addTag($Tag);
+        header("Location: ../../views/admin/addCategorie.php");
+
 
     } catch (Exception $e) {
         echo "Erreur lors de l'enregistrement de Tag : " . $e->getMessage();    }

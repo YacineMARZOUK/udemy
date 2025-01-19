@@ -2,10 +2,13 @@
 
 require_once('../controller/impl/Courcontrollerimpl.php');
 require_once('../controller/impl/CategorieControllerimpl.php');
+require_once('../controller/impl/TagControllerimpl.php');
 $contrl = new Courcontrollerimpl();
 $result = $contrl->fetchCours();
 $Categories = new CategorieControllerimpl();
 $allCategories = $Categories->getAllCategories();
+$Tags= new TagControllerimpl();
+$allTags = $Tags->getAllTags();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -111,49 +114,66 @@ $allCategories = $Categories->getAllCategories();
 
         <!-- Form Section -->
         <section>
-            <div class="py-10 md:px-12 px-6">
-                <h2 class="text-4xl font-bold text-gray-800 mb-6 text-center md:mb-11">
-                    Course Enrollment Form
-                </h2>
+        <div class="py-10 md:px-12 px-6">
+            <h2 class="text-4xl font-bold text-gray-800 mb-6 text-center md:mb-11">
+                Course Enrollment Form
+            </h2>
 
-                <form action="../controller/base/baseController.php" method="POST" class="max-w-lg mx-auto space-y-6">
-    <div>
-        <label for="course_title" class="block text-sm font-medium text-gray-700">Course Title</label>
-        <input type="text" id="course_title" name="titre" required class="mt-2 p-2 w-full border border-gray-300 rounded-lg" placeholder="Enter the course title">
-    </div>
+            <form action="../controller/base/baseController.php" method="POST" class="max-w-lg mx-auto space-y-6">
+                <div>
+                    <label for="course_title" class="block text-sm font-medium text-gray-700">Course Title</label>
+                    <input type="text" id="course_title" name="titre" required class="mt-2 p-2 w-full border border-gray-300 rounded-lg" placeholder="Enter the course title">
+                </div>
 
-    <div>
-        <label for="student_name" class="block text-sm font-medium text-gray-700">Description</label>
-        <input type="text" id="student_name" name="description" required class="mt-2 p-2 w-full border border-gray-300 rounded-lg" placeholder="Enter your name">
-    </div>
+                <div>
+                    <label for="student_name" class="block text-sm font-medium text-gray-700">Description</label>
+                    <input type="text" id="student_name" name="description" required class="mt-2 p-2 w-full border border-gray-300 rounded-lg" placeholder="Enter your name">
+                </div>
 
-    <div>
-        <label for="student_email" class="block text-sm font-medium text-gray-700">Video</label>
-        <input type="text" id="student_email" name="images" required class="mt-2 p-2 w-full border border-gray-300 rounded-lg" placeholder="Enter your email">
-    </div>
+                <div>
+                    <label for="student_email" class="block text-sm font-medium text-gray-700">Video</label>
+                    <input type="text" id="student_email" name="images" required class="mt-2 p-2 w-full border border-gray-300 rounded-lg" placeholder="Enter your email">
+                </div>
 
-    <div>
-        <label for="contenu" class="block text-sm font-medium text-gray-700">Content</label>
-        <input type="text" id="contenu" name="contenu" required class="mt-2 p-2 w-full border border-gray-300 rounded-lg" placeholder="Enter your phone number">
-    </div>
+                <div>
+                    <label for="contenu" class="block text-sm font-medium text-gray-700">Content</label>
+                    <input type="text" id="contenu" name="contenu" required class="mt-2 p-2 w-full border border-gray-300 rounded-lg" placeholder="Enter your phone number">
+                </div>
 
-    <!-- Select for Categories -->
-    <div>
-        <label for="category" class="block text-sm font-medium text-gray-700">Category</label>
-        <select id="category" name="idCategorie" required class="mt-2 p-2 w-full border border-gray-300 rounded-lg">
-            <option value="">Select a category</option>
-            <?php
-            foreach ($allCategories as $category) {
-                echo '<option value="' . $category['id'] . '">' . $category['titre'] . '</option>';
-            }
-            ?>
-        </select>
-    </div>
+                <!-- Select for Categories -->
+                <div>
+                    <label for="category" class="block text-sm font-medium text-gray-700">Category</label>
+                    <select id="category" name="idCategorie" required class="mt-2 p-2 w-full border border-gray-300 rounded-lg">
+                        <option value="">Select a category</option>
+                        <?php
+                        foreach ($allCategories as $category) {
+                            echo '<option value="' . $category['id'] . '">' . $category['titre'] . '</option>';
+                        }
+                        ?>
+                    </select>
+                </div>
 
-    <div class="flex justify-between items-center">
-        <button type="submit" name="addCour" class="py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">Add Course</button>
-    </div>
-</form>
+                <!-- New Select for Tags -->
+                <div>
+                    <label for="tags" class="block text-sm font-medium text-gray-700">Tags</label>
+                    <div class="mt-2 p-2 border border-gray-300 rounded-lg max-h-40 overflow-y-auto">
+                        <?php
+                        foreach ($allTags as $tag) {
+                            echo '<div class="flex items-center mb-2">';
+                            echo '<input type="checkbox" id="tag_' . $tag['id'] . '" name="tags[]" value="' . $tag['id'] . '" class="mr-2">';
+                            echo '<label for="tag_' . $tag['id'] . '" class="text-sm text-gray-700">' . $tag['nom'] . '</label>';
+                            echo '</div>';
+                        }
+                        ?>
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-center">
+                    <button type="submit" name="addCour" class="py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">Add Course</button>
+                </div>
+            </form>
+        </div>
+    </section>
 
             </div>
         </section>

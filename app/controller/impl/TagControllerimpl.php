@@ -17,7 +17,15 @@ class TagControllerimpl{
             return false ;
 
     }
+    }
+    public function getAllTags(){
+        try{
+            return $this->TagModel->getAllTags();
+        }
+        catch (Exception $e) {
+            return false ;
 
+    }
     }
 }
 

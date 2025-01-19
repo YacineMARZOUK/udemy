@@ -6,7 +6,7 @@ class TagModelimpl implements TagModel{
     
     private PDO $conn;
 
-    function __construct() {
+    public function __construct() {
         $this->conn = Database::getInstance()->getConnection();
     }
 
@@ -21,6 +21,20 @@ class TagModelimpl implements TagModel{
             throw new Exception("Error while adding Tag to the database: " . $e->getMessage());
         }
     }
+
+    public function getAllTags(): array
+    {
+        $query = "SELECT * FROM tags";
+        $stmt = $this->conn->query($query);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+
+       
+    }
+
+
+
+
 }
 
 
