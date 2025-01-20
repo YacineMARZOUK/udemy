@@ -76,7 +76,7 @@ public function updateCour($course): bool
     }
 }
 
-public function getCourseById(int $id): ?object
+public function getCourseById(int $id)
 {
     try {
         return $this->courModel->getCourseById($id);

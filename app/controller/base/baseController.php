@@ -211,35 +211,31 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 
     if (isset($_POST['enrollCourse'])) {
-        // Vérifier si l'utilisateur est connecté
-        if (!isset($_SESSION['user'])) {
-            $_SESSION['error_message'] = "Please login to enroll in courses";
-            header("Location: ../../user/login.php");
-            exit();
-        }
-        
-        $courseId = isset($_POST['course_id']) ? (int)$_POST['course_id'] : 0;
-        $userId = $_SESSION['user']->getId();
-        
-        if ($courseId <= 0) {
-            $_SESSION['error_message'] = "Invalid course selection";
-            
-            exit();
-        }
-        
-        // Fix: Use correct controller variable name
-        $Courcontroller = new Courcontrollerimpl();  // Make sure this matches your controller name
-        $result = $Courcontroller->enrollUserInCourse($userId, $courseId);
-        
-        if ($result['success']) {
-            $_SESSION['success_message'] = $result['message'];
-        } else {
-            $_SESSION['error_message'] = $result['message'];
-        }
-        
-        
+    // Debug the incoming data
+    error_log('POST data: ' . print_r($_POST, true));
+    
+    $courseId = isset($_POST['course_id']) ? (int)$_POST['course_id'] : null;
+    error_log('Course ID: ' . $courseId);
+    
+    if (empty($courseId) || $courseId <= 0) {
+        $_SESSION['error_message'] = "Invalid course selection";
+        header("Location: ../../views/cours.php");
         exit();
     }
+    
+    $Courcontroller = new Courcontrollerimpl();
+    $result = $Courcontroller->getCourseById($courseId);
+    
+    if ($result) {
+        // Log successful course retrieval
+        error_log('Course found: ' . print_r($result, true));
+        header("Location: ../../views/detailsCours.php?id=" . $courseId);
+    } else {
+        $_SESSION['error_message'] = "Course not found";
+        header("Location: ../../views/cours.php");
+    }
+    exit();
+}
 }
 
 //*******************************************************************admin section********************************************** */
