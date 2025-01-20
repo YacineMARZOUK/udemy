@@ -3,21 +3,29 @@
 require_once __DIR__ . '/../enums/Role.php';
 
 class User {
-    private int $id;
-    private string $name;
-    private string $email;
-    private string $password;
-    private $role;
+    protected int $id;
+    protected string $name;
+    protected string $email;
+    protected string $password;
+    protected $role;
+    protected string $status;
 
-    public function __construct( string $email, string $password, string $name  ,  $role ) {
-        $this->name = $name;
+    public function __construct(
+        string $email, 
+        string $password, 
+        string $name, 
+        $role, 
+        string $status = 'active'
+    ) {
         $this->email = $email;
         $this->password = $password;
+        $this->name = $name;
         $this->role = $role;
+        $this->status = $status;
     }
-    
-    public function getId(): int {  
-        return $this->id;   
+
+    public function getId(): int {
+        return $this->id;
     }
 
     public function getName(): string {
@@ -36,6 +44,10 @@ class User {
         return $this->role;
     }
 
+    public function getStatus(): string {
+        return $this->status;
+    }
+
     public function setId(int $id): void {
         $this->id = $id;
     }
@@ -52,10 +64,12 @@ class User {
         $this->password = $password;
     }
 
-    public function setRole( $role): void {
+    public function setRole($role): void {
         $this->role = $role;
     }
 
-    
+    public function setStatus(string $status): void {
+        $this->status = $status;
+    }
 }
 ?>

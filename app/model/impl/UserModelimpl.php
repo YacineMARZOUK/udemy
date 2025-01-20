@@ -11,26 +11,27 @@ class UserModelimpl implements UserModel
         $this->conn = Database::getInstance()->getConnection();
     }
 
-    public function save(User $user): bool
-    {
-
-        $query = "INSERT INTO users (nom , email, password , role) values (:name , :email, :password , :role)";
-
-        try {
-            $stmt = $this->conn->prepare($query);
-
-            return $stmt->execute(
-                [
+    public function save(User $user): bool {
+        if ($user instanceof Student || $user instanceof Teacher) {
+            $query = "INSERT INTO users (nom, email, password, role, status) 
+                      VALUES (:name, :email, :password, :role, :status)";
+            
+            try {
+                $stmt = $this->conn->prepare($query);
+                
+                return $stmt->execute([
                     ':name' => $user->getName(),
                     ':email' => $user->getEmail(),
                     ':password' => $user->getPassword(),
-                    ':role' => $user->getRole()
-                ]
-            );
-            
-        } catch (Exception $e) {
-            throw new Exception("error while saving user into database");
+                    ':role' => $user->getRole(), // Get the string value from the enum
+                    ':status' => $user->getStatus() // Now properly getting status from the user object
+                ]);
+                
+            } catch (Exception $e) {
+                throw new Exception("Error while saving user into database: " . $e->getMessage());
+            }
         }
+        throw new Exception("Invalid user type");
     }
 
 
@@ -57,16 +58,57 @@ class UserModelimpl implements UserModel
             throw new Exception("Error fetching users: " . $e->getMessage());
         }
     }
-    public function verifyEmail(string $email)
-    {
+    public function verifyEmail(string $email) {
         $query = "SELECT * FROM users WHERE email = :email";
-        $statement = $this->conn->prepare($query);
-        $statement->bindParam(':email', $email);
-        $statement->execute();
-       $result =$statement->fetch(PDO::FETCH_ASSOC);
-       var_dump($result);
-      return new User( $result["email"], $result['password'], $result['nom'] , $result['role'] );
-
+        try {
+            $statement = $this->conn->prepare($query);
+            $statement->bindParam(':email', $email);
+            $statement->execute();
+            
+            $result = $statement->fetch(PDO::FETCH_ASSOC);
+            
+            if (!$result) {
+                return null;
+            }
+            $role = Role::from($result['role']);
+        $status = $result['status'] ?? 'active';
+    
+            // Create the appropriate user type based on role
+            if ($role === Role::TEACHER) {
+                $user = new Teacher(
+                    $result['email'],
+                    $result['password'],
+                    $result['nom'],
+                    $role,
+                    $status
+                );
+            } else if ($role === Role::STUDENT) {
+                $user = new Student(
+                    $result['email'],
+                    $result['password'],
+                    $result['nom'],
+                    $role,
+                    $status
+                );
+            } else {
+                $user = new User(
+                    $result['email'],
+                    $result['password'],
+                    $result['nom'],
+                    $role,
+                    $status
+                );
+            }
+    
+            if (isset($result['id'])) {
+                $user->setId($result['id']);
+            }
+            
+            return $user;
+    
+        } catch (PDOException $e) {
+            throw new Exception("Database error: " . $e->getMessage());
+        }
     }
     public function verifyUser(User $user): array|bool
     {

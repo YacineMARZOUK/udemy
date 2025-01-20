@@ -20,14 +20,16 @@ class UserControllerimpl {
                     $_POST["email"],
                     $_POST["password"],
                     $_POST["name"],
-                    Role::from($_POST["role"]) // Utilisation de la méthode from()
+                    Role::from($_POST["role"], // Utilisation de la méthode from()
+                    $_POST["status"])
                 );
             } else if ($person->getRole()=== Role::TEACHER) {
                 $person = new Teacher(
                     $_POST["email"],
                     $_POST["password"],
                     $_POST["name"],
-                    Role::from($_POST["role"])
+                    Role::from($_POST["role"], // Utilisation de la méthode from()
+                    $_POST["status"])
                 );
             }
             
@@ -39,16 +41,23 @@ class UserControllerimpl {
     }
 
     public function verifyUser(User $person) {
-        var_dump($person);
-        $email = $person->getEmail();
         try {
-           $obj = $this->userModel->verifyEmail( $email);
+            $user = $this->userModel->verifyEmail($person->getEmail());
             
-            
-            return ($obj);
+            if (!$user) {
+                return null;
+            }
+    
+            // Verify password
+            if (!password_verify($person->getPassword(), $user->getPassword())) {
+                return null;
+            }
+    
+            return $user;
+    
         } catch(Exception $e) {
-            error_log("Erreur lors de la vérification de l'utilisateur: " . $e->getMessage());
-            return false;
+            error_log("User verification error: " . $e->getMessage());
+            throw $e;
         }
     }
 }

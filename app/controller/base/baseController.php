@@ -25,84 +25,104 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $email = $_POST["email"] ?? "";
         $password = $_POST["password"] ?? "";
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-
+        
         if (empty($role) || empty($name) || empty($email) || empty($password)) {
             echo "Tous les champs sont requis.";
             exit();
         }
-
-        if ($role === "student") {
-            $role = Role::from($role); 
-            $person = new Student($email, $hashed_password, $name, $role);
-        } elseif ($role === "teacher") {
-            $role = Role::from($role); 
-            $person = new Teacher($email, $hashed_password, $name, $role);
-        } else {
-            echo "Type d'utilisateur invalide.";
-            exit();
-        }
-
-        $person->setName($name);
-        $person->setEmail($email);
-        $person->setPassword($hashed_password);
-
+    
         try {
-            $userController->save($person);
-            header("Location: ../../user/login.php");
+            if ($role === "student") {
+                $role = Role::from($role);
+                $status = 'active'; // Students are active by default
+                $person = new Student($email, $hashed_password, $name, $role, $status);
+            } elseif ($role === "teacher") {
+                $role = Role::from($role);
+                $status = 'pending'; // Teachers need approval
+                $person = new Teacher($email, $hashed_password, $name, $role, $status);
+            } else {
+                echo "Type d'utilisateur invalide.";
+                exit();
+            }
+    
+            $result = $userController->save($person);
+            
+            if ($result) {
+                $_SESSION['success_message'] = "Registration successful!";
+                if ($role === Role::TEACHER) {
+                    $_SESSION['info_message'] = "Your account is pending approval.";
+                }
+                header("Location: ../../user/login.php");
+            } else {
+                echo "Error during registration.";
+            }
         } catch (Exception $e) {
             echo "Erreur lors de l'enregistrement : " . $e->getMessage();
         }
     }
 
     if (isset($_POST['login'])) {
-        // Assurez-vous que les champs email et mot de passe sont fournis
-       echo 'ggg';
         $email = $_POST['email'] ?? '';
         $password = $_POST['password'] ?? '';
         
         if (empty($email) || empty($password)) {
-            echo $email ;
-            echo "Email et mot de passe sont requis.";
+            $_SESSION['error'] = "Email and password are required.";
+            header("Location: ../../user/login.php");
             exit();
         }
-
-        // Créez l'objet $person en utilisant les données du formulaire
-       
-       echo "<pre>";
-       echo "</pre>";// Vous pouvez ajuster selon votre rôle
-       try {
-           // Appeler verifyUser pour vérifier si l'utilisateur existe
-           
-           $person = new User($email, $password, $name = '',Role::STUDENT); 
-           echo $person->getEmail();
-           var_dump($person);
-            $userData = $userController->verifyUser( $person);
-            echo "<br>".$userData->getRole();
-            $person->setRole( $userData->getRole());
-            if ($userData) {
-                if($userData->getRole()==Role::STUDENT){
-                    $_SESSION["user"] = $userData;
-                
-                    header('location:../../views/coursStudent.php');
+    
+        try {
+            // Create a basic user object for verification
+            $person = new User($email, $password, '', Role::STUDENT, 'active');
+            
+            // Get user data including status
+            $userData = $userController->verifyUser($person);
+            
+            if (!$userData) {
+                $_SESSION['error'] = "Invalid email or password.";
+                header("Location: ../../user/login.php");
+                exit();
+            }
+    
+            $status = $userData->getStatus();
+            
+            switch($status) {
+                case 'block':
+                    $_SESSION['error'] = "Your account has been blocked. Please contact support.";
+                    header("Location: ../../user/login.php");
                     exit();
-                }elseif($userData->getRole()==Role::TEACHER){
-                    $_SESSION["user"] = $userData;
                 
-                    header('location:../../views/cours.php');
+                case 'pending':
+                    $_SESSION['error'] = "Your account is pending approval. Please wait for administrator confirmation.";
+                    header("Location: ../../user/login.php");
                     exit();
-                }else{
+                
+                case 'active':
+                    // Set session data
                     $_SESSION["user"] = $userData;
-                
-                    header('location:../../views/admin/addCategorie.php');
+                    
+                    // Redirect based on role
+                    switch($userData->getRole()) {
+                        case Role::STUDENT:
+                            header('location: ../../views/coursStudent.php');
+                            break;
+                        case Role::TEACHER:
+                            header('location: ../../views/cours.php');
+                            break;
+                        case Role::ADMIN:
+                            header('location: ../../views/admin/addCategorie.php');
+                            break;
+                        default:
+                            $_SESSION['error'] = "Invalid role assigned.";
+                            header("Location: ../../user/login.php");
+                    }
                     exit();
-                }
-                
-            } else {
-                // Email ou mot de passe incorrect
-                echo "Email ou mot de passe incorrect.";
             }
         } catch (Exception $e) {
-            echo "Erreur lors de la vérification : " . $e->getMessage();
+            $_SESSION['error'] = "An error occurred during login. Please try again.";
+            error_log("Login error: " . $e->getMessage());
+            header("Location: ../../user/login.php");
+            exit();
         }
     }
 
@@ -203,7 +223,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         
         if ($courseId <= 0) {
             $_SESSION['error_message'] = "Invalid course selection";
-            header("Location: ../../views/cours.php");
+            
             exit();
         }
         
@@ -217,7 +237,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $_SESSION['error_message'] = $result['message'];
         }
         
-        header("Location: ../../views/cours.php");
+        
         exit();
     }
 }
