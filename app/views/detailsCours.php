@@ -92,7 +92,7 @@ $course = $contrl->getCourseById($courseId);
                                     </a>
                                 <?php else: ?>
                                     <button type="submit" 
-                                            name="enrollCourse" 
+                                            name="enrollintoit" 
                                             class="w-full py-3 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
                                         Enroll Now
                                     </button>

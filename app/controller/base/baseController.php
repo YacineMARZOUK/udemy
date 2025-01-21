@@ -236,6 +236,43 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
     exit();
 }
+//*******************************************************************enrolle into the cours********************************************** */
+
+if (isset($_POST['enrollintoit'])) {
+    $courseId = isset($_POST['course_id']) ? (int)$_POST['course_id'] : null;
+    
+    if (!isset($_SESSION['user'])) {
+        $_SESSION['error_message'] = "Please login to enroll in courses";
+        header("Location: ../../user/login.php");
+        exit();
+    }
+    
+    $user = $_SESSION['user'];
+    if (!$user || !method_exists($user, 'getId')) {
+        $_SESSION['error_message'] = "Invalid user session";
+        header("Location: ../../user/login.php");
+        exit();
+    }
+    
+    $userId = $user->getId();
+    
+    if (empty($courseId) || $courseId <= 0) {
+        $_SESSION['error_message'] = "Invalid course selection";
+        exit();
+    }
+    
+    $Courcontroller = new Courcontrollerimpl();
+    $result = $Courcontroller->enrollUserInCourse($userId, $courseId);
+    
+    if ($result['success']) {
+        $_SESSION['success_message'] = $result['message'];
+        header("Location: ../../views/coursStudent.php?id=" . $courseId);
+    } else {
+        $_SESSION['error_message'] = $result['message'];
+        
+    }
+    exit();
+}
 }
 
 //*******************************************************************admin section********************************************** */

@@ -146,29 +146,46 @@ class CourModelimpl implements CourModel
     
     public function enrollUserInCourse($userId, $courseId) {
         try {
-            $connection = Database::getInstance()->getConnection();
-            
-            // Vérifier si l'utilisateur est déjà inscrit
-            $checkQuery = "SELECT id FROM enrolled WHERE iduser = ? AND idcour = ?";
-            $checkStmt = $connection->prepare($checkQuery);
-            $checkStmt->execute([$userId, $courseId]);
+            // First check if user is already enrolled
+            $checkQuery = "SELECT id FROM enrolled WHERE iduser = :userId AND idcour = :courseId";
+            $checkStmt = $this->conn->prepare($checkQuery);
+            $checkStmt->execute([
+                ':userId' => $userId,
+                ':courseId' => $courseId
+            ]);
             
             if ($checkStmt->rowCount() > 0) {
-                return ["success" => false, "message" => "You are already enrolled in this course"];
+                return [
+                    "success" => false, 
+                    "message" => "You are already enrolled in this course"
+                ];
             }
             
-            // Procéder à l'inscription
-            $query = "INSERT INTO enrolled (iduser, idcour, created_at) VALUES (?, ?, NOW())";
-            $stmt = $connection->prepare($query);
-            $result = $stmt->execute([$userId, $courseId]);
+            // Proceed with enrollment
+            $query = "INSERT INTO enrolled (iduser, idcour, created_at) VALUES (:userId, :courseId, NOW())";
+            $stmt = $this->conn->prepare($query);
+            $result = $stmt->execute([
+                ':userId' => $userId,
+                ':courseId' => $courseId
+            ]);
             
             if ($result) {
-                return ["success" => true, "message" => "Successfully enrolled in the course"];
+                return [
+                    "success" => true, 
+                    "message" => "Successfully enrolled in the course"
+                ];
             } else {
-                return ["success" => false, "message" => "Failed to enroll in the course"];
+                return [
+                    "success" => false, 
+                    "message" => "Failed to enroll in the course"
+                ];
             }
         } catch (PDOException $e) {
-            return ["success" => false, "message" => "Database error: " . $e->getMessage()];
+            error_log("Database error during enrollment: " . $e->getMessage());
+            return [
+                "success" => false, 
+                "message" => "Database error during enrollment"
+            ];
         }
     }
 
