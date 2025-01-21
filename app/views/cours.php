@@ -204,12 +204,12 @@ $allcours=$contrl->countCour();
                         </button>
 
                         <!-- Delete button -->
-                        <form action="../controller/base/baseController.php" method="POST">
-    <input type="hidden" name="course_id" value="<?= $cour->getId() ?>">
-    <button type="submit" name="enrollCourse">
-        Enroll Now
-    </button>
-</form>
+                        <form action="../controller/base/baseController.php" method="POST" onsubmit="return confirm('Are you sure you want to delete this course?');">
+                            <input type="hidden" name="deletCour" value="<?=$cour->id?>">
+                            <button type="submit" class="w-full py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition-colors">
+                                Delete
+                            </button>
+                        </form>
 
                         <!-- Update button -->
                         <button 
