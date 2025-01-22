@@ -273,6 +273,43 @@ if (isset($_POST['enrollintoit'])) {
     }
     exit();
 }
+  
+ //*******************************************************************activate user and blockit********************************************** */
+
+if (isset($_POST['activateUser'])) {
+    $userId = (int)$_POST['userId'];
+    try {
+        if ($userController->updateUserStatus($userId, 'active')) {
+            $_SESSION['success_message'] = "User activated successfully";
+        } else {
+            $_SESSION['error_message'] = "Failed to activate user";
+        }
+    } catch (Exception $e) {
+        $_SESSION['error_message'] = "Error: " . $e->getMessage();
+    }
+    header("Location: ../../views/admin/addCategorie.php");
+    exit();
+}
+
+if (isset($_POST['blockUser'])) {
+    $userId = (int)$_POST['userId'];
+    try {
+        if ($userController->updateUserStatus($userId, 'blocked')) {
+            $_SESSION['success_message'] = "User blocked successfully";
+        } else {
+            $_SESSION['error_message'] = "Failed to block user";
+        }
+    } catch (Exception $e) {
+        $_SESSION['error_message'] = "Error: " . $e->getMessage();
+    }
+    header("Location: ../../views/admin/addCategorie.php");
+    exit();
+}
+
+
+
+
+
 }
 
 //*******************************************************************admin section********************************************** */

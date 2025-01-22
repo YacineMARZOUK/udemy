@@ -10,5 +10,9 @@ interface UserModel
     public function verifyUser(User $user);
 
     public function countUser(): int;
+
+    public function getAllUsers(): array;
+
+    public function updateUserStatus(int $userId, string $status): bool;
 }
 ?>

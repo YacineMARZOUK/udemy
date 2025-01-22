@@ -137,6 +137,55 @@ class UserModelimpl implements UserModel
     }
 
 
+    public function getAllUsers(): array {
+        $query = "SELECT * FROM users WHERE role != 'admin'";
+        try {
+            $stmt = $this->conn->prepare($query);
+            $stmt->execute();
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            $users = [];
+            foreach ($results as $result) {
+                if ($result['role'] === 'teacher') {
+                    $user = new Teacher(
+                        $result['email'],
+                        $result['password'],
+                        $result['nom'],
+                        Role::from($result['role']),
+                        $result['status']
+                    );
+                } else {
+                    $user = new Student(
+                        $result['email'],
+                        $result['password'],
+                        $result['nom'],
+                        Role::from($result['role']),
+                        $result['status']
+                    );
+                }
+                $user->setId($result['id']);
+                $users[] = $user;
+            }
+            return $users;
+        } catch (Exception $e) {
+            throw new Exception("Error fetching users: " . $e->getMessage());
+        }
+    }
+    
+    public function updateUserStatus(int $userId, string $status): bool {
+        $query = "UPDATE users SET status = :status WHERE id = :id";
+        try {
+            $stmt = $this->conn->prepare($query);
+            return $stmt->execute([
+                ':status' => $status,
+                ':id' => $userId
+            ]);
+        } catch (Exception $e) {
+            throw new Exception("Error updating user status: " . $e->getMessage());
+        }
+    }
+
+
 
 }
 

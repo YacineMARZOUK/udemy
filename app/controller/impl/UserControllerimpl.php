@@ -60,4 +60,12 @@ class UserControllerimpl {
             throw $e;
         }
     }
+
+    public function getAllUsers(): array {
+        return $this->userModel->getAllUsers();
+    }
+    
+    public function updateUserStatus(int $userId, string $status): bool {
+        return $this->userModel->updateUserStatus($userId, $status);
+    }
 }

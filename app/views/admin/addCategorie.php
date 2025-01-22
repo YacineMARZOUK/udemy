@@ -1,4 +1,20 @@
+<?php
 
+require_once('../../controller/impl/UserControllerimpl.php');
+require_once('../../controller/impl/Courcontrollerimpl.php');
+
+$statis = new UserModelimpl();
+$statisResult =$statis->countUser();
+
+$userController = new UserControllerimpl();
+$users = $userController->getAllUsers();
+
+$contrl=new Courcontrollerimpl();
+$result=$contrl->fetchCours();
+$allcours=$contrl->countCour();
+
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -60,23 +76,7 @@
                     <?php
                     
                     if (!isset($_SESSION["user"])) {
-                    ?>
-                        <div class="flex items-center space-x-4">
-                            <button
-                                class="p-2 px-4 bg-blue-600 text-white rounded-full hover:bg-white hover:text-blue-600 hover:border hover:border-blue-600 transition-colors">
-                                <a href="../user/login.php">Login</a>
-                            </button>
-
-                            <button
-                                class="p-2 px-4 border border-blue-600 text-blue-600 rounded-full hover:bg-blue-600 hover:text-white transition-colors">
-                                <a href="../app/user/register.php">Register</a>
-                            </button>
-
-                            <button class="p-2 hover:text-bg-blue-600 transition-colors">
-                                <i class="ri-menu-4-fill text-2xl"></i>
-                            </button>
-                        </div>
-                    <?php
+                   
                     } else {
                     ?>
                         <div class="flex items-center space-x-4">
@@ -100,6 +100,78 @@
                 </div>
             </div>
         </header>
+        <section class="bg-gray-50 py-10">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl font-semibold text-gray-800 mb-6 text-center">Course Statistics</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Number of Courses -->
+                    <div class="bg-white border border-blue-600 rounded-lg p-6 text-center">
+                        <h3 class="text-xl font-semibold text-gray-800">Total Courses</h3>
+                        <p class="text-2xl font-bold text-blue-600"><?= $allcours ?></p>
+                    </div>
+
+                    <!-- Number of Students -->
+                    <div class="bg-white border border-blue-600 rounded-lg p-6 text-center">
+                        <h3 class="text-xl font-semibold text-gray-800">Total Students</h3>
+                        <p class="text-2xl font-bold text-blue-600"><?= $statisResult ?></p>
+                    </div>
+
+                    <!-- Popular Course -->
+                    <div class="bg-white border border-blue-600 rounded-lg p-6 text-center">
+                        <h3 class="text-xl font-semibold text-gray-800">Most Popular Course</h3>
+                        <p class="text-2xl font-bold text-blue-600"><?= $statistics['popular_course'] ?? 'N/A' ?></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-white py-10">
+    <div class="container mx-auto px-6">
+        <h2 class="text-3xl font-semibold text-gray-800 mb-6 text-center">User Management</h2>
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white border border-gray-300">
+                <thead>
+                    <tr>
+                        <th class="px-6 py-3 border-b text-left">Name</th>
+                        <th class="px-6 py-3 border-b text-left">Email</th>
+                        <th class="px-6 py-3 border-b text-left">Role</th>
+                        <th class="px-6 py-3 border-b text-left">Status</th>
+                        <th class="px-6 py-3 border-b text-left">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($users as $user): ?>
+                    <tr>
+                        <td class="px-6 py-4 border-b"><?= htmlspecialchars($user->getName()) ?></td>
+                        <td class="px-6 py-4 border-b"><?= htmlspecialchars($user->getEmail()) ?></td>
+                        <td class="px-6 py-4 border-b"><?= htmlspecialchars($user->getRole()) ?></td>
+                        <td class="px-6 py-4 border-b">
+                            <span class="px-2 py-1 rounded-full text-sm <?= $user->getStatus() === 'active' ? 'bg-green-100 text-green-800' : ($user->getStatus() === 'pending' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800') ?>">
+                                <?= htmlspecialchars($user->getStatus()) ?>
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 border-b">
+                            <form action="../../controller/base/baseController.php" method="POST" class="inline">
+                                <input type="hidden" name="userId" value="<?= $user->getId() ?>">
+                                <?php if ($user->getStatus() !== 'active'): ?>
+                                    <button type="submit" name="activateUser" class="bg-green-500 text-white px-3 py-1 rounded mr-2 hover:bg-green-600">
+                                        Activate
+                                    </button>
+                                <?php endif; ?>
+                                <?php if ($user->getStatus() !== 'blocked'): ?>
+                                    <button type="submit" name="blockUser" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
+                                        Block
+                                    </button>
+                                <?php endif; ?>
+                            </form>
+                        </td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
 
         <!-- Form Section -->
         <section>
