@@ -10,15 +10,43 @@ require_once 'C:\xampp\htdocs\udemy\app\model\impl\CourModelimpl.php';
 
     public function fetchCours(): array|bool {
         try {
-            $result=$this->courModel->getAllCours();
+            $result = $this->courModel->getAllCours();
+            if ($result === false) {
+                error_log("Failed to fetch courses");
+            }
             return $result;
         }
         catch (Exception $e) {
-            return false ;
-
+            error_log("Error fetching courses: " . $e->getMessage());
+            return false;
+        }
     }
-
-
+    public function fetchMyCours() {
+        try {
+            $result = $this->courModel->getAllMyCours(10);
+            if ($result === false) {
+                error_log("Failed to fetch courses");
+            }
+            return $result;
+        }
+        catch (Exception $e) {
+            error_log("Error fetching courses: " . $e->getMessage());
+            return false;
+        }
+    }
+    public function fetchCoursbyTeacher($idTeacher): array|bool {
+        try {
+            
+            $result = $this->courModel->getAllCoursbyTeacher($idTeacher);
+            if ($result === false) {
+                error_log("Failed to fetch courses");
+            }
+            return $result;
+        }
+        catch (Exception $e) {
+            error_log("Error fetching courses: " . $e->getMessage());
+            return false;
+        }
     }
     public function addCour(Cour $cour){
         try {

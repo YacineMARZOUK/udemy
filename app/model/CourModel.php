@@ -7,6 +7,7 @@ interface CourModel {
   public function searchCour( $titre);
   public function countCour(): int;
   public function getAllCours(): array;
+  public function getAllCoursbyTeacher(int $categoryId): array;
   public function getCourseById($id);
   public function getCoursesByCategory(int $categoryId): array; 
 }

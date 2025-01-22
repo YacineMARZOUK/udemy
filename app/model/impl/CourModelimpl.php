@@ -14,28 +14,36 @@ class CourModelimpl implements CourModel
     }
 
     public function addCour(Cour $cour): bool {
-        $query = "INSERT INTO Cours (titre, description, contenu, image, idCategorie) 
-                 VALUES (:titre, :description, :contenu, :image, :idCategorie)";
+        $query = "INSERT INTO cours (titre, description, contenu, video, idCategorie, idTeacher, created_at, updated_at) 
+                 VALUES (:titre, :description, :contenu, :video, :idCategorie, :idTeacher, NOW(), NOW())";
         try {
             $stmt = $this->conn->prepare($query);
-            return $stmt->execute([
+            $result = $stmt->execute([
                 ':titre' => $cour->gettitre(),
                 ':description' => $cour->getdescription(),
                 ':contenu' => $cour->getcontenu(),
-                ':image' => $cour->getimages() ?? "default.jpg",
-                ':idCategorie' => $cour->getIdCategorie()
+                ':video' => $cour->getVideo(),
+                ':idCategorie' => $cour->getIdCategorie(),
+                ':idTeacher' => $cour->getIdTeacher()
             ]);
+            
+            if (!$result) {
+                error_log("Database insert failed: " . print_r($stmt->errorInfo(), true));
+            }
+            return $result;
         } catch (Exception $e) {
-            throw new Exception("Error while saving course into database: " . $e->getMessage());
+            error_log("Error adding course: " . $e->getMessage());
+            throw new Exception("Error while saving course: " . $e->getMessage());
         }
     }
-
+    
     public function updateCour($course) {
         try {
             $sql = "UPDATE cours 
                     SET titre = :titre, 
                         description = :description,
                         contenu = :contenu,
+                        idTeacher = :idTeacher,
                         updated_at = CURRENT_TIMESTAMP
                     WHERE id = :id";
                     
@@ -44,6 +52,7 @@ class CourModelimpl implements CourModel
                 ':titre' => $course->getTitre(),
                 ':description' => $course->getDescription(),
                 ':contenu' => $course->getContenu(),
+                ':idTeacher' => $course->getIdTeacher(),
                 ':id' => $course->getId()
             ]);
         } catch (PDOException $e) {
@@ -51,33 +60,36 @@ class CourModelimpl implements CourModel
             throw new Exception("Error updating course: " . $e->getMessage());
         }
     }
-    
     public function getCourseById($id) {
         try {
-            $sql = "SELECT * FROM cours WHERE id = ?";
+            $sql = "SELECT c.*, cat.titre as category_name 
+                    FROM cours c 
+                    LEFT JOIN categories cat ON c.idCategorie = cat.id 
+                    WHERE c.id = ?";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute([$id]);
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
+    
             if (!$result) {
                 return null;
             }
-
+    
+            // Create course object with proper type casting
             $course = new Cour(
                 $result['titre'],
                 $result['description'] ?? '',
                 $result['contenu'] ?? '',
-                $result['idcategorie'],
-                $result['image'] ?? ''
-                
+                (int)$result['idcategorie'], // Cast to integer
+                (int)$result['idteacher'],   // Cast to integer
+                $result['video'] ?? 'default.mp4'
             );
-            $course->setId($result['id']);
+            $course->setId((int)$result['id']);
             return $course;
         } catch (PDOException $e) {
+            error_log("Error fetching course: " . $e->getMessage());
             throw new Exception("Error fetching course: " . $e->getMessage());
         }
     }
-
 
     public function deleteCour(int $id): void
     {
@@ -125,9 +137,26 @@ class CourModelimpl implements CourModel
 
     public function getAllCours(): array {
         $query = "SELECT c.*, cat.titre as category_name 
-                 FROM Cours c 
+                 FROM cours c 
                  LEFT JOIN categories cat ON c.idCategorie = cat.id";
         $statement = $this->conn->query($query);
+        return $statement->fetchAll(PDO::FETCH_OBJ);
+    }
+
+    public function getAllMyCours($getID): array {
+        $query = "SELECT * FROM cours INNER JOIN enrolled ON cours.id = enrolled.idcour WHERE cours.idteacher = :getID";
+        $statement = $this->conn->prepare($query);  // Use prepare instead of query
+        $statement->bindParam(":getID", $getID, PDO::PARAM_INT);  // Bind the parameter
+        $statement->execute();  // Execute the query
+        return $statement->fetchAll(PDO::FETCH_OBJ);  // Fetch the results
+    }
+    public function getAllCoursbyTeacher($idTeacher): array {
+        $query = "SELECT c.*, cat.titre as category_name 
+                 FROM cours c 
+                 LEFT JOIN categories cat ON c.idCategorie = cat.id  where c.idteacher = :idt " ;
+        $statement = $this->conn->prepare($query);
+        $statement->bindParam(":idt",$idTeacher);
+        $statement->execute();
         return $statement->fetchAll(PDO::FETCH_OBJ);
     }
 

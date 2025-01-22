@@ -4,18 +4,27 @@ class Cour {
     private int $id;
     private string $titre;
     private string $description;
-    private string $images;
+    private string $video; // Changed from images
     private string $contenu;
-    private int $idCategorie; // Added field
+    private int $idCategorie;
+    private int $idTeacher;
+    
 
-    public function __construct(string $titre, string $description, string $contenu, int $idCategorie, string $images = "default.jpg") {
+    public function __construct(
+        string $titre, 
+        string $description, 
+        string $contenu, 
+        int $idCategorie, 
+        int $idTeacher, // New parameter
+        string $video = "default.mp4"
+    ) {
         $this->titre = $titre;
         $this->description = $description;
         $this->contenu = $contenu;
-        $this->images = $images;
+        $this->video = $video;
         $this->idCategorie = $idCategorie;
+        $this->idTeacher = $idTeacher;
     }
-
     public function getId(): int {
         return $this->id;
     }
@@ -48,19 +57,28 @@ class Cour {
         $this->contenu = $contenu;
     }
 
-    public function getimages(): string {
-        return $this->images;
-    }
-
-    public function setimage(string $images): void {
-        $this->images = $images;
-    }
+    
     public function getIdCategorie(): int {
         return $this->idCategorie;
     }
 
     public function setIdCategorie(int $idCategorie): void {
         $this->idCategorie = $idCategorie;
+    }
+    public function getVideo(): string {
+        return $this->video;
+    }
+
+    public function setVideo(string $video): void {
+        $this->video = $video;
+    }
+
+    public function getIdTeacher(): int {
+        return $this->idTeacher;
+    }
+
+    public function setIdTeacher(int $idTeacher): void {
+        $this->idTeacher = $idTeacher;
     }
 }
 ?>

@@ -85,7 +85,7 @@ $course = $contrl->getCourseById($courseId);
                             <form action="../controller/base/baseController.php" method="POST">
                                 <input type="hidden" name="course_id" value="<?= $course->getId() ?>">
                                 
-                                <?php if (!isset($_SESSION['user'])): ?>
+                                <?php if (!isset($_SESSION['y'])): ?>
                                     <a href="../../user/login.php" 
                                        class="block w-full py-3 px-4 bg-blue-600 text-white text-center rounded-lg hover:bg-blue-700 transition-colors">
                                         Login to Enroll

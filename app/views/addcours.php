@@ -60,33 +60,15 @@ $allTags = $Tags->getAllTags();
                         <img src="./assets/images/Youdemy_Logo.svg" alt="Youdemy Platform">
                     </a>
                     <nav class="hidden md:flex items-center space-x-6">
-                        <a href="../../index.php" class="text-blue-600 font-bold hover:text-bg-blue-600 transition-colors">Home</a>
-                        <a href="/app/views/cours.php" class="text-gray-900 hover:text-bg-blue-600 transition-colors">Courses</a>
-                        <a href="./pages/pricing.php" class="text-gray-900 hover:text-bg-blue-600 transition-colors">Pricing</a>
-                        <a href="./pages/features.php" class="text-gray-900 hover:text-bg-blue-600 transition-colors">Features</a>
-                        <a href="./pages/features.php" class="text-gray-900 hover:text-bg-blue-600 transition-colors">Blog</a>
-                        <a href="./pages/contact.php" class="text-gray-900 hover:text-bg-blue-600 transition-colors">Help Center</a>
+                    <a href="cours.php" class="p-2 px-4 bg-blue-600 text-white rounded-full hover:bg-white hover:text-blue-600 hover:border hover:border-blue-600 transition-colors">all courses</a>
+
                     </nav>
 
                     <?php
                     
                     if (!isset($_SESSION["user"])) {
                     ?>
-                        <div class="flex items-center space-x-4">
-                            <button
-                                class="p-2 px-4 bg-blue-600 text-white rounded-full hover:bg-white hover:text-blue-600 hover:border hover:border-blue-600 transition-colors">
-                                <a href="../user/login.php">Login</a>
-                            </button>
-
-                            <button
-                                class="p-2 px-4 border border-blue-600 text-blue-600 rounded-full hover:bg-blue-600 hover:text-white transition-colors">
-                                <a href="../app/user/register.php">Register</a>
-                            </button>
-
-                            <button class="p-2 hover:text-bg-blue-600 transition-colors">
-                                <i class="ri-menu-4-fill text-2xl"></i>
-                            </button>
-                        </div>
+                        
                     <?php
                     } else {
                     ?>
@@ -119,7 +101,7 @@ $allTags = $Tags->getAllTags();
                 Course Enrollment Form
             </h2>
 
-            <form action="../controller/base/baseController.php" method="POST" class="max-w-lg mx-auto space-y-6">
+            <form action="../controller/base/baseController.php"  method="POST"  enctype="multipart/form-data"  class="max-w-lg mx-auto space-y-6">
                 <div>
                     <label for="course_title" class="block text-sm font-medium text-gray-700">Course Title</label>
                     <input type="text" id="course_title" name="titre" required class="mt-2 p-2 w-full border border-gray-300 rounded-lg" placeholder="Enter the course title">
@@ -131,8 +113,14 @@ $allTags = $Tags->getAllTags();
                 </div>
 
                 <div>
-                    <label for="student_email" class="block text-sm font-medium text-gray-700">Video</label>
-                    <input type="text" id="student_email" name="images" required class="mt-2 p-2 w-full border border-gray-300 rounded-lg" placeholder="Enter your email">
+                      <label for="video_upload" class="block text-sm font-medium text-gray-700">Course Video</label>
+                      <input type="file" 
+                             id="video_upload" 
+                             name="video" 
+                             accept="video/*"
+                                  required 
+                          class="mt-2 p-2 w-full border border-gray-300 rounded-lg">
+                       <p class="mt-1 text-sm text-gray-500">Upload your course video (MP4, WebM formats recommended)</p>
                 </div>
 
                 <div>

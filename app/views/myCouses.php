@@ -1,13 +1,15 @@
 <?php
-session_start();
-require_once('../controller/impl/Courcontrollerimpl.php');
-require_once('../controller/impl/UserControllerimpl.php');
-$statis = new UserModelimpl();
-$statisResult =$statis->countUser();
 
-$contrl=new Courcontrollerimpl();
-$result=$contrl->fetchCoursbyTeacher( $_SESSION["y"]);
-$allcours=$contrl->countCour();
+    require_once('C:\xampp\htdocs\udemy\app\controller\impl\Courcontrollerimpl.php');
+    require_once('C:\xampp\htdocs\udemy\app\controller\base\baseController.php'); 
+    $contrl=new Courcontrollerimpl();
+    $result=$contrl->fetchMyCours();
+    if(isset( $_SESSION['searchResults']))
+    {
+        $result =  $_SESSION['searchResults'];
+        unset( $_SESSION['searchResults']);
+    }
+
 
 ?>
 <!DOCTYPE html>
@@ -60,12 +62,9 @@ $allcours=$contrl->countCour();
                     <img src="./assets/images/Youdemy_Logo.svg" alt="Youdemy Platform">
                     </a>
                     <nav class="hidden md:flex items-center space-x-6">
-                        <a href="../../index.php" class="text-blue-600 font-bold  hover:text-bg-blue-600 transition-colors">Home</a>
-                        <a href="/app/views/cours.php" class="text-gray-900 hover:text-bg-blue-600 transition-colors">Courses</a>
-                        <a href="./pages/pricing.php" class="text-gray-900 hover:text-bg-blue-600 transition-colors">Pricing</a>
-                        <a href="./pages/features.php" class="text-gray-900 hover:text-bg-blue-600 transition-colors">Features</a>
-                        <a href="./pages/features.php" class="text-gray-900 hover:text-bg-blue-600 transition-colors">Blog</a>
-                        <a href="addcours.php" class="p-2 px-4 bg-blue-600 text-white rounded-full hover:bg-white hover:text-blue-600 hover:border hover:border-blue-600 transition-colors">ADD cours</a>
+                        <a href="../../index.php" class="text-gray-600  hover:text-bg-blue-600 transition-colors">Home</a>
+                        <a href="coursStudent.php" class="text-gray-900 hover:text-bg-blue-600 transition-colors">Courses</a>
+                        <a href="myCouses.php" class="text-blue-900 font-bold hover:text-bg-blue-600 transition-colors">My Courses</a>
                     </nav>
 
                     <?php
@@ -74,7 +73,7 @@ $allcours=$contrl->countCour();
                         <div class="flex items-center space-x-4">
                             <button
                                 class="p-2 px-4 bg-blue-600 text-white rounded-full hover:bg-white hover:text-blue-600 hover:border hover:border-blue-600 transition-colors">
-                                <a href="../user/login.php">Login</a>
+                                <a href="../app/user/login.php">Login</a>
                             </button>
 
                             <button
@@ -95,12 +94,12 @@ $allcours=$contrl->countCour();
                         <div class="flex items-center space-x-4">
                             <button
                                 class="p-2 px-4 bg-blue-600 text-white rounded-full hover:bg-white hover:text-blue-600 hover:border hover:border-blue-600 transition-colors">
-                                <a href="../user/login.php">log out</a>
+                                <a href="../app/user/login.php">log out</a>
                             </button>
 
                             <button
                                 class="p-2 px-4 border border-blue-600 text-blue-600 rounded-full hover:bg-blue-600 hover:text-white transition-colors">
-                                <a href="../app/user/register.php"></a>
+                                <a href="../app/user/register.php"><?php echo $_SESSION['user']->getEmail() ?></a>
                             </button>
 
 
@@ -122,7 +121,7 @@ $allcours=$contrl->countCour();
                         <a href="./pages/pricing.php" class="text-gray-900 hover:text-bg-blue-600 transition-colors">Pricing</a>
                         <a href="./pages/features.php" class="text-gray-900 hover:text-bg-blue-600 transition-colors">Features</a>
                         <a href="./pages/features.php" class="text-gray-900 hover:text-bg-blue-600 transition-colors">Blog</a>
-                        <a href="addcours.php" class="text-gray-900 hover:text-bg-blue-600 transition-colors">ADD cours</a>
+                        <a href="./pages/contact.php" class="text-gray-900 hover:text-bg-blue-600 transition-colors">Help Center</a>
                     </nav>
                 </div>
             </div>
@@ -131,119 +130,92 @@ $allcours=$contrl->countCour();
         <!-- Hero Section -->
     </div>
 
-    <section class="bg-gray-50 py-10">
-            <div class="container mx-auto px-6">
-                <h2 class="text-3xl font-semibold text-gray-800 mb-6 text-center">Course Statistics</h2>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <!-- Number of Courses -->
-                    <div class="bg-white border border-blue-600 rounded-lg p-6 text-center">
-                        <h3 class="text-xl font-semibold text-gray-800">Total Courses</h3>
-                        <p class="text-2xl font-bold text-blue-600"><?= $allcours ?></p>
-                    </div>
 
-                    <!-- Number of Students -->
-                    <div class="bg-white border border-blue-600 rounded-lg p-6 text-center">
-                        <h3 class="text-xl font-semibold text-gray-800">Total Students</h3>
-                        <p class="text-2xl font-bold text-blue-600"><?= $statisResult ?></p>
-                    </div>
 
-                    <!-- Popular Course -->
-                    <div class="bg-white border border-blue-600 rounded-lg p-6 text-center">
-                        <h3 class="text-xl font-semibold text-gray-800">Most Popular Course</h3>
-                        <p class="text-2xl font-bold text-blue-600"><?= $statistics['popular_course'] ?? 'N/A' ?></p>
-                    </div>
-                </div>
-            </div>
-        </section>
+    <section class="py-10 md:px-12 px-6 bg-gray-100">
+       <div class="container mx-auto">
+        <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">
+            Search for Your <span class="text-gradient bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-blue-600">Courses</span>
+        </h2>
+        <form method="POST" action="../controller/base/baseController.php" class="flex justify-center">
+            <input 
+                type="text" 
+                name="search" 
+                placeholder="Enter course name or keyword" 
+                class="w-full max-w-lg px-4 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-600" 
+            />
+            <button 
+                type="submit" 
+                name="searchCours"
+                class="px-6 py-2 bg-blue-600 text-white font-semibold rounded-r-lg hover:bg-blue-700 transition-colors"
+            >
+                Search
+            </button>
+         </form>
+        </div>
+    </section>
+
     <!-- Courses Grid Section -->
 
     <section>
     <div class="py-10 md:px-12 px-6">
         <h2 class="text-4xl font-bold text-gray-800 mb-6 text-center md:mb-11">
-            Our ALL <span class="text-gradient bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-blue-600">Courses</span>
+            My <span class="text-gradient bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-blue-600">Courses</span>
         </h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <?php foreach ($result as $cour) { ?>
-    <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
-        <!-- Video Container -->
-        <div class="relative">
-            <video class=" object-cover" controls>
-                <source src="./../<?php echo htmlspecialchars($cour->video); ?>" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
-        </div>
+            <?php foreach ($result as $cour) { ?>
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+                <!-- Category Badge -->
+                <div class="relative">
+                <video class="w-full h-full object-cover" controls>
+    <source src="./../<?php echo htmlspecialchars($cour->video); ?>" type="video/mp4">
+</video>
 
-        <!-- Course Content -->
-        <div class="p-6">
-            <!-- Category Badge -->
-            <span class="inline-block px-3 py-1 bg-green-500 text-white text-sm font-semibold rounded-full mb-4">
-                <?=$cour->category_name?>
-            </span>
-            
-            <!-- Course Title -->
-            <h3 class="text-xl font-bold text-gray-800 mb-2"><?=$cour->titre?></h3>
-            
-            <!-- Course Meta -->
-            <div class="flex items-center text-sm text-gray-500 mb-4 space-x-4">
-                <span class="flex items-center">
-                    <i class="ri-calendar-line mr-1"></i> 
-                    <span>20 Nov, 2023</span>
-                </span>
-                <span class="flex items-center">
-                    <i class="ri-file-list-line mr-1"></i>
-                    <span>3 Modules</span>
-                </span>
-                <span class="flex items-center">
-                    <i class="ri-group-line mr-1"></i>
-                    <span>5 Students</span>
-                </span>
-            </div>
-
-            <!-- Course Description -->
-            <p class="text-gray-600 mb-4 line-clamp-2">
-                <?=$cour->description?>
-            </p>
-
-            <!-- Course Footer -->
-            <div class="flex items-center justify-between pt-4 border-t border-gray-100">
-                <div class="flex items-center space-x-1">
-                    <i class="ri-star-fill text-yellow-400"></i>
-                    <span class="font-semibold"><?=$cour->contenu?></span>
                 </div>
-                <div class="grid grid-cols-3 gap-2">
-                    <!-- Enroll Button -->
-                    <form action="../controller/base/baseController.php" method="POST">
-                        <input type="hidden" name="course_id" value="<?=$cour->id?>">
-                        <button type="submit" name="enrollCourse" 
-                            class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium">
-                            Enroll Now
-                        </button>
-                    </form>
 
-                    <!-- Delete Button -->
-                    <form action="../controller/base/baseController.php" method="POST" 
-                        onsubmit="return confirm('Are you sure you want to delete this course?');">
-                        <input type="hidden" name="deletCour" value="<?=$cour->id?>">
-                        <button type="submit" 
-                            class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium">
-                            Delete
-                        </button>
-                    </form>
+                <!-- Course Content -->
+                <div class="p-6">
+                    <!-- Course Title -->
+                    <h3 class="text-xl font-bold text-gray-800 mb-2"><?=$cour->titre?></h3>
+                    
+                    <!-- Course Meta -->
+                    <div class="flex items-center text-sm text-gray-500 mb-4 space-x-4">
+                        <span class="flex items-center">
+                            <i class="ri-calendar-line mr-1"></i> 
+                            <span>20 Nov, 2023</span>
+                        </span>
+                        <span class="flex items-center">
+                            <i class="ri-file-list-line mr-1"></i>
+                            <span>3 Modules</span>
+                        </span>
+                        <span class="flex items-center">
+                            <i class="ri-group-line mr-1"></i>
+                            <span>5 Students</span>
+                        </span>
+                    </div>
 
-                    <!-- Update Button -->
-                    <button onclick="window.location.href='update_course.php?id=<?=$cour->id?>'"
-                        class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium">
-                        Update
-                    </button>
+                    <!-- Course Description -->
+                    <p class="text-gray-600 mb-4 line-clamp-2">
+                        <?=$cour->description?>
+                    </p>
+
+                    <!-- Course Footer -->
+                    <div class="flex items-center justify-between pt-4 border-t border-gray-100">
+                        <div class="flex items-center space-x-1">
+                            <i class="ri-star-fill text-yellow-400"></i>
+                            <span class="font-semibold"><?=$cour->contenu?></span>
+                        </div>
+                        <form action="../controller/base/baseController.php" method="POST">
+    <input type="hidden" name="course_id" value="<?= $cour->id?>">
+</form>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-<?php } ?>
-
+            <?php } ?>
         </div>
     </div>
 </section>
+
     <!-- Footer Section -->
 
     <footer class="bg-blue-10 py-16 ">

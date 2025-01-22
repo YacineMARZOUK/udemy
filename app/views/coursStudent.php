@@ -62,12 +62,9 @@ if(isset( $_SESSION['searchResults']))
                     <img src="./assets/images/Youdemy_Logo.svg" alt="Youdemy Platform">
                     </a>
                     <nav class="hidden md:flex items-center space-x-6">
-                        <a href="../../index.php" class="text-blue-600 font-bold  hover:text-bg-blue-600 transition-colors">Home</a>
-                        <a href="/app/views/cours.php" class="text-gray-900 hover:text-bg-blue-600 transition-colors">Courses</a>
-                        <a href="./pages/pricing.php" class="text-gray-900 hover:text-bg-blue-600 transition-colors">Pricing</a>
-                        <a href="./pages/features.php" class="text-gray-900 hover:text-bg-blue-600 transition-colors">Features</a>
-                        <a href="./pages/features.php" class="text-gray-900 hover:text-bg-blue-600 transition-colors">Blog</a>
-                        <a href="./pages/contact.php" class="text-gray-900 hover:text-bg-blue-600 transition-colors">Help Center</a>
+                        <a href="../../index.php" class="text-gray-600 font-bold  hover:text-bg-blue-600 transition-colors">Home</a>
+                        <a href="coursStudent.php" class="text-blue-900 font-bold hover:text-bg-blue-600 transition-colors">Courses</a>
+                        <a href="myCouses.php" class="text-gray-900 hover:text-bg-blue-600 transition-colors">My Courses</a>
                     </nav>
 
                     <?php
@@ -170,10 +167,10 @@ if(isset( $_SESSION['searchResults']))
             <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
                 <!-- Category Badge -->
                 <div class="relative">
-                    <img src="/assets/images/cover4.png" alt="Course Image" class="w-full h-48 object-cover">
-                    <span class="absolute top-4 right-4 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium">
-                        <?=$cour->category_name?>
-                    </span>
+                <video class="w-full h-full object-cover" controls>
+    <source src="./../<?php echo htmlspecialchars($cour->video); ?>" type="video/mp4">
+</video>
+
                 </div>
 
                 <!-- Course Content -->

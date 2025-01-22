@@ -10,7 +10,6 @@ require_once 'C:\xampp\htdocs\udemy\app\entities\Tags.php';
 require_once 'C:\xampp\htdocs\udemy\app\enums\Role.php';
 
 session_start();
-
 $userController = new UserControllerimpl();
 $Courcontroller = new Courcontrollerimpl();
 $Categoriecontroller = new CategorieControllerimpl();
@@ -83,7 +82,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 header("Location: ../../user/login.php");
                 exit();
             }
-    
+            $_SESSION["y"] =  $userData->getId();
             $status = $userData->getStatus();
             
             switch($status) {
@@ -99,7 +98,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 
                 case 'active':
                     // Set session data
-                    $_SESSION["user"] = $userData;
                     
                     // Redirect based on role
                     switch($userData->getRole()) {
@@ -107,6 +105,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                             header('location: ../../views/coursStudent.php');
                             break;
                         case Role::TEACHER:
+                        
                             header('location: ../../views/cours.php');
                             break;
                         case Role::ADMIN:
@@ -128,26 +127,60 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     //*****************************************************add cour****************************************************************
     if (isset($_POST["addCour"])) {
-    $titre = $_POST["titre"] ?? "";
-    $description = $_POST["description"] ?? "";
-    $images = $_POST["images"] ?? "";
-    $contenu = $_POST["contenu"] ?? "";
-    $idCategorie = $_POST["idCategorie"] ?? 0;
+        $titre = $_POST["titre"] ?? "";
+        $description = $_POST["description"] ?? "";
+        $contenu = $_POST["contenu"] ?? "";
+        $idCategorie = $_POST["idCategorie"] ?? 0;
+        
+        if (!isset($_SESSION['user']) || $_SESSION['user']->getRole() != Role::TEACHER) {
+            $_SESSION['error'] = "Only teachers can add courses";
+            header("Location: ../../views/addcours.php");
+            exit();
+        }
+        
+        $teacherId = $_SESSION['user']->getId();
+        
+        // Create upload directory if it doesn't exist
+        $uploadDir = __DIR__ . '/../../uploads/videos/';
+        if (!file_exists($uploadDir)) {
+            mkdir($uploadDir, 0777, true);
+        }
+        
+        // Handle video upload
+        $videoPath = 'default.mp4';
+        if (isset($_FILES['video']) && $_FILES['video']['error'] === UPLOAD_ERR_OK) {
+            $videoName = uniqid() . '_' . basename($_FILES['video']['name']);
+            $videoPath = 'uploads/videos/' . $videoName;
+            $videoDestination = $uploadDir . $videoName;
+            
+            if (!move_uploaded_file($_FILES['video']['tmp_name'], $videoDestination)) {
+                $_SESSION['error'] = "Failed to upload video file";
+                header("Location: ../../views/addcours.php");
+                exit();
+            }
+        }
+        
+        if (empty($titre) || empty($description) || empty($contenu) || empty($idCategorie)) {
+            $_SESSION['error'] = "All fields are required";
+            header("Location: ../../views/addcours.php");
+            exit();
+        }
     
-    if (empty($titre) || empty($description) || empty($contenu) || empty($idCategorie)) {
-        echo "Tous les champs sont requis.";
-        exit();
-    }
+        try {
+            $cour = new Cour($titre, $description, $contenu, (int)$idCategorie, $teacherId, $videoPath);
+            if ($Courcontroller->addCour($cour)) {
+                $_SESSION['success'] = "Course added successfully";
+                header("Location: ../../views/addcours.php");
+                exit();
+            } else {
+                $_SESSION['error'] = "Failed to add course";
+            }
+        } catch (Exception $e) {
+            $_SESSION['error'] = "Error adding course: " . $e->getMessage();
+        }
+        
 
-    $cour = new Cour($titre, $description, $contenu, (int)$idCategorie, $images);
-
-    try {
-        $Courcontroller->addCour($cour);
-        header("Location: ../../views/addcours.php");
-    } catch (Exception $e) {
-        echo "Erreur lors de l'enregistrement : " . $e->getMessage();
     }
-}
 
     //*****************************************************search cours****************************************************************
     if (isset($_POST["search"])) {
